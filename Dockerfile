@@ -133,10 +133,13 @@ COPY docker/caddy/Caddyfile /etc/caddy/Caddyfile
 
 FROM symfony_php as symfony_php_debug
 
+
 ARG XDEBUG_VERSION=3.0.4
 RUN set -eux; \
 		apk add --no-cache --virtual .build-deps $PHPIZE_DEPS; \
 		pecl install xdebug-$XDEBUG_VERSION; \
 		docker-php-ext-enable xdebug; \
+		echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+        echo "xdebug.client_host = host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
 		apk del .build-deps
 
