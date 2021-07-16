@@ -13,62 +13,78 @@ use OpenApi\Annotations as OA;
 class ExtractPdfBarcodeController //extends AbstractAPIController
 {
     /**
-     * Extract the barcode from PDF.
+     * Extract the barcode from PDF(GET).
      *
      * @Route("/api/doc/extractpdfbarcode", methods={"GET"})
      *
      * @OA\Response(
      *     response=200,
-     *     description="Returns barcode/s from PDF"
+     *     description="Returned barcode/s from PDF"
      *)
      * @OA\Parameter(
-     *     name="operation_id",
+     *     name="operationId",
      *     in="query",
-     *     type="integer",
-     *     format="int64",
+     *     @OA\Schema(type="integer"),
+     *     @OA\Schema(format="int64"),
      *     description="Single operation of extracting Barcode from PDF",
-     *     required="true"
+     *     required=true
      * )
+     *
      * @OA\Parameter(
      *     name="pdf_file",
      *     in="header",
-     *     type="object",
+     *     @OA\Schema(type="object"),
      *     description="File in pdf format",
-     *     required="true"
+     *     required=true
      * )
      * @OA\Parameter(
      *     name="jpeg_file",
      *     in="header",
-     *     type="object",
+     *     @OA\Schema(type="object"),
      *     description="File in jpeg format",
-     *     required="true"
+     *     required=true
      * )
      * @OA\Parameter(
      *     name="counter",
      *     in="header",
-     *     type="integer",
+     *     @OA\Schema(type="integer"),
      *     description="Counter of barcodes on single page",
-     *     required="true"
+     *     required=true
      * )
      * @OA\Parameter(
      *     name="barcode_type",
      *     in="header",
-     *     type="integer",
+     *     @OA\Schema(type="integer"),
      *     description="Type of barcode",
-     *     required="true"
+     *     required=true
      * )
      * @OA\Parameter(
      *     name="barcode",
      *     in="header",
-     *     type="string",
+     *     @OA\Schema(type="string"),
+     *     @OA\Schema(format="byte"),
      *     description="Barcode in string format",
-     *     required="true"
+     *     required=true
      * )
+     *
      */
     public function test(): Response
     {
         return new Response(
             '<html><body> ExtractPdfBarcodeController </body></html>'
+        );
+    }
+
+    /**
+     * Extract the barcode from PDF(GET).
+     *
+     * @Route("/api/doc/extractpdfbarcodePOST", methods={"POST"})
+     *
+     */
+    public function post(): Response
+    {
+        return new Response(
+            '<html><body> POST </body></html>'
         );
     }
 }
