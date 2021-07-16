@@ -1,6 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace App;
+
 use InvalidArgumentException;
+
 final class Email
 {
     private $email;
@@ -25,12 +30,7 @@ final class Email
     private function ensureIsValidEmail(string $email): void
     {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    '"%s" is not a valid email address',
-                    $email
-                )
-            );
+            throw new InvalidArgumentException(sprintf('"%s" is not a valid email address', $email));
         }
     }
 }
