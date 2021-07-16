@@ -1,0 +1,20 @@
+<?php
+// https://confluence.webchili.in/pages/viewpage.action?pageId=129630212
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__.'/src');
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@PSR2' => true,
+        '@Symfony' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'no_multiline_whitespace_before_semicolons' => true,
+        'no_short_echo_tag' => true,
+        'no_unused_imports' => true,
+        'no_useless_else' => true,
+        'single_line_throw' => false,
+        'ordered_imports' => ['sort_algorithm' => 'alpha', 'imports_order' => ['const', 'class', 'function']]
+    ])
+    ->setFinder($finder)
+;

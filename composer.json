@@ -40,15 +40,28 @@
         "symfony/polyfill-php72": "*"
     },
     "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        "conflict": {
+            "symfony/symfony": "*"
         },
-        "post-install-cmd": [
-            "@auto-scripts"
+        "extra": {
+            "symfony": {
+                "allow-contrib": false,
+                "require": "5.0.*"
+            }
+        },
+        "check": [
+            "@test",
+            "@quality"
         ],
-        "post-update-cmd": [
-            "@auto-scripts"
+        "style": "php-cs-fixer fix --dry-run --diff",
+        "style-fix": "php-cs-fixer fix",
+        "quality": "phpstan analyse -c phpstan.neon",
+        "quality-ci": "phpstan analyse -c phpstan.neon --error-format gitlab > quality-report.json",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-text",
+        "test-coverage-ci": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit --coverage-text --colors=never --coverage-clover phpunit_clover.xml --log-junit phpunit_report.xml"
         ]
     },
     "conflict": {
@@ -60,5 +73,16 @@
             "require": "5.3.*",
             "docker": true
         }
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpstan/phpstan": "^0.12.92",
+        "phpstan/phpstan-symfony": "^0.12.21",
+        "phpunit/phpunit": "^9",
+        "roave/security-advisories": "dev-master",
+        "symfony/browser-kit": "^5.0",
+        "symfony/maker-bundle": "^1.14",
+        "symfony/phpunit-bridge": "^5.0",
+        "symfony/profiler-pack": "^1.0"
     }
 }
