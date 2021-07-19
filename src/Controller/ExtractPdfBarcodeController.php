@@ -10,12 +10,66 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 
-class ExtractPdfBarcodeController //extends AbstractAPIController
+class ExtractPdfBarcodeController
 {
+    /**
+     * Parse a PDF file and extract the table of barcodes.
+     *
+     * @Route("/api/doc/extractpdfbarcodePOST", methods={"POST"})
+     *
+     * @OA\Parameter(
+     *     name="PDF file",
+     *     in="path",
+     *     description="PDF file with one/multiple barcodes",
+     *     required=true,
+     *      @OA\Schema(
+     *             type="string",
+     *             format="base64",
+     *         )
+     * )
+     *
+     * @OA\RequestBody(
+     *     description="Upload PDF file",
+     *     @OA\MediaType(
+     *      mediaType="application/octet-stream",
+     *     @OA\Schema(
+     *       type="string",
+     *       format="base64"
+     *      )
+     * )
+     * )
+     *
+     * @OA\Response (
+     *     response=200,
+     *     description="You have just parsed a PDF file",
+     *     @OA\JsonContent(
+     *     type="array",
+     *     @OA\Items(
+     *     type="string",
+     *     enum = {"answer", "testing", "my","array"}
+     *
+     * )
+     * )
+     * )
+     *
+     * @OA\Response (
+     *     response=400,
+     *     description="This is not a PDF file",
+     * )
+     *
+     *
+     */
+    public function post(): Response
+    {
+        return new Response(
+            '<html><body> POST </body></html>'
+        );
+    }
+
     /**
      * Extract the barcode from PDF(GET).
      *
-     * @Route("/api/doc/extractpdfbarcode", methods={"GET"})
+     *
      *
      * @OA\Response(
      *     response=200,
@@ -75,53 +129,5 @@ class ExtractPdfBarcodeController //extends AbstractAPIController
         );
     }
 
-    /**
-     * Extract the barcode from PDF(POST).
-     *
-     * @Route("/api/doc/extractpdfbarcodePOST", methods={"POST"})
-     *
-     * @OA\Parameter(
-     *     name="file",
-     *     in="path",
-     *     description="file",
-     *     required=true,
-     *      @OA\Schema(
-     *             type="string",
-     *             format="base64",
-     *             example=1
-     *         )
-     * )
-     *
-     * @OA\RequestBody(
-     *     description="Upload PDF file",
-     *     @OA\MediaType(
-     *      mediaType="application/octet-stream",
-     *     @OA\Schema(
-     *       type="string",
-     *       format="base64"
-     *      )
-     * )
-     * )
-     *
-     * @OA\Response (
-     *     response=200,
-     *     description="You have just parsed a PDF file",
-     *     @OA\JsonContent(
-     *     type="array",
-     *     @OA\Items(
-     *     type="string",
-     *     enum = {"answer", "testing", "my","array"}
-     *
-     * )
-     * )
-     * )
-     *
-     *
-     */
-    public function post(): Response
-    {
-        return new Response(
-            '<html><body> POST </body></html>'
-        );
-    }
+
 }
