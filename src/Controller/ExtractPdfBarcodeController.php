@@ -76,9 +76,46 @@ class ExtractPdfBarcodeController //extends AbstractAPIController
     }
 
     /**
-     * Extract the barcode from PDF(GET).
+     * Extract the barcode from PDF(POST).
      *
      * @Route("/api/doc/extractpdfbarcodePOST", methods={"POST"})
+     *
+     * @OA\Parameter(
+     *     name="file",
+     *     in="path",
+     *     description="file",
+     *     required=true,
+     *      @OA\Schema(
+     *             type="string",
+     *             format="base64",
+     *             example=1
+     *         )
+     * )
+     *
+     * @OA\RequestBody(
+     *     description="Upload PDF file",
+     *     @OA\MediaType(
+     *      mediaType="application/octet-stream",
+     *     @OA\Schema(
+     *       type="string",
+     *       format="base64"
+     *      )
+     * )
+     * )
+     *
+     * @OA\Response (
+     *     response=200,
+     *     description="You have just parsed a PDF file",
+     *     @OA\JsonContent(
+     *     type="array",
+     *     @OA\Items(
+     *     type="string",
+     *     enum = {"answer", "testing", "my","array"}
+     *
+     * )
+     * )
+     * )
+     *
      *
      */
     public function post(): Response
