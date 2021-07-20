@@ -11,19 +11,16 @@ stages:
     only:
         - master
         - merge_requests
-        - /BDS-Rel\.(\d+)\.((\d+)\.\d+|\d+)\-webchili/
-        - /BDS-Rel\.(\d+)\.((\d+)\.\d+|\d+)\-PD/
     except:
         - tags
     ​
 dependency:
     stage: prepare
-    image:  gitlab.webchili.in:4567/docker-images/php-dev:7.4
+    image:  crimsey/pdfbarcode
     cache:
-        key: code-cache-3-0
+        key: pdfbarcode
         paths:
             - vendor
-            - public
     script:
         - echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_rsa
         - export COMPOSER_AUTH=$COMPOSER_AUTHJSON
@@ -36,9 +33,9 @@ dependency:
     ​
 tests:
     stage: test
-    image:  gitlab.webchili.in:4567/docker-images/php-dev:7.4
+    image:  crimsey/pdfbarcode
     cache:
-        key: code-cache-3-0
+        key: pdfbarcode
         paths:
             - vendor
         policy: pull
@@ -57,9 +54,9 @@ tests:
     ​
 code_style:
     stage: lint
-    image:  gitlab.webchili.in:4567/docker-images/php-dev:7.4
+    image:  crimsey/pdfbarcode
     cache:
-        key: code-cache-3-0
+        key: pdfbarcode
         paths:
             - vendor
         policy: pull
@@ -71,9 +68,9 @@ code_style:
     ​
 code_quality:
     stage: lint
-    image:  gitlab.webchili.in:4567/docker-images/php-dev:7.4
+    image:  crimsey/pdfbarcode
     cache:
-        key: code-cache-3-0
+        key: pdfbarcode
         paths:
             - vendor
         policy: pull
