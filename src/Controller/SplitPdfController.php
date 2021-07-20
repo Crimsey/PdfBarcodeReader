@@ -6,13 +6,12 @@ namespace App\Controller;
 
 //use App\Controller\AbstractAPIController;
 //use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 
 class SplitPdfController
 {
-
     /**
      * Split PDF file, regarding the table of barcodes.
      *
@@ -57,8 +56,6 @@ class SplitPdfController
      *      )
      * )
      * )
-     *
-     *
      */
     public function split(): Response
     {
