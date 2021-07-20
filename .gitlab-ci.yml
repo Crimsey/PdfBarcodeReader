@@ -1,19 +1,16 @@
 before_script:
     - echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
-    - export APP_ENV=test
-    ​
+    - export APP_ENV=test​
 stages:
     - prepare
     - lint
     - test
-    ​
 .only-code-ci: &only-code-ci
     only:
         - master
         - merge_requests
     except:
-        - tags
-    ​
+        - tags​
 dependency:
     stage: prepare
     image:  crimsey/pdfbarcode
@@ -30,7 +27,7 @@ dependency:
     tags:
         - php
     <<: *only-code-ci
-    ​
+    
 tests:
     stage: test
     image:  crimsey/pdfbarcode
@@ -51,7 +48,7 @@ tests:
     tags:
         - php
     <<: *only-code-ci
-    ​
+    
 code_style:
     stage: lint
     image:  crimsey/pdfbarcode
@@ -65,7 +62,7 @@ code_style:
     tags:
         - php
     <<: *only-code-ci
-    ​
+    
 code_quality:
     stage: lint
     image:  crimsey/pdfbarcode
