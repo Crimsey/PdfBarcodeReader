@@ -75,17 +75,6 @@ code_quality:
         policy: pull
     script:
         - composer quality
-    #    - composer quality-ci
-    #  after_script:
-    #    - cat quality-report.json | grep -v -e '^$' > quality-report2.json
-    #  artifacts:
-    #    when: always
-    #    expire_in: 1 month
-    #    paths:
-    #      - quality-report.json
-    #      - quality-report2.json
-    #    reports:
-    #      codequality: quality-report2.json
     tags:
         - php
     <<: *only-code-ci
