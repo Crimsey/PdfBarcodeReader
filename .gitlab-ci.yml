@@ -1,7 +1,8 @@
 before_script:
     - echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
     - export APP_ENV=test
-    - apk add --no-cache bash​
+    - apk add --no-cache bash
+    - export CGO_ENABLED=0​
 stages:
     - prepare
     - lint
