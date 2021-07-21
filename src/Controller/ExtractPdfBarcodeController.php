@@ -9,12 +9,10 @@ namespace App\Controller;
 use http\Exception\InvalidArgumentException;
 use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints as Assert;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class ExtractPdfBarcodeController
 {
@@ -62,7 +60,6 @@ class ExtractPdfBarcodeController
      *     description="This is not a PDF file",
      * )
      *
-     *
      * @ParamConverter("myfile", converter="string_to_file_converter")
      */
     public function extract(): Response
@@ -77,7 +74,6 @@ class ExtractPdfBarcodeController
             throw new InvalidArgumentException('Invalid argument - not base64');
         }
 */
-
         return new Response(
             '<html><body> POST </body></html>'
         );

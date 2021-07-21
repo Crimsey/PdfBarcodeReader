@@ -2,42 +2,38 @@
 
 // src/Converter/StringToPdfConverter.php
 
-declare(strict_types = 1);
+declare(strict_types=1);
+
 namespace App\Converter;
 
-use Symfony\Component\HttpFoundation\File\File;
-//use Symfony\Component\Validator\Constraints as Assert;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+//use Symfony\Component\Validator\Constraints as Assert;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class StringToPdfConverter implements ParamConverterInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function apply(Request $request, ParamConverter $configuration): bool
     {
         //public File $myfile = null;
-        $stringfile = $_POST["myfile"];
+        $stringfile = $_POST['myfile'];
 
-        if($stringfile === null) {
+        if (null === $stringfile) {
             throw new BadRequestHttpException('File not provided');
         }
-        else if($stringfile === base64_decode($stringfile, true)){
-            echo '$myfile is base64';
-            if (file_put_contents($stringfile,base64_decode($stringfile,true)))
-            {
+        /*else {
+            if ($stringfile === base64_decode($stringfile, true)) {
+                echo '$myfile is base64';
 
-            }
-        } else{
-            echo '$myfile is NOT base64';
-            throw new InvalidArgumentException('Invalid argument - not base64');
-        }
+                }
+            } else {
+                echo '$myfile is NOT base64';
+
+            }*/
 
         $options = $configuration->getOptions();
-        $file = $this->getFile();
 
         /*$options = $configuration->getOptions();
 
@@ -86,8 +82,8 @@ class StringToPdfConverter implements ParamConverterInterface
 
         return null;
     }*/
-    private function getFile(Request $request, array $options) : File
+    /*private function getFile(Request $request, array $options) : File
     {
-
-    }
+        return
+    }*/
 }
