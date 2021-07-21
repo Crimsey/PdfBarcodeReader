@@ -11,7 +11,7 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     string_to_file_converter:
-        class: src/Converter/StringToPdfConverter.php
+        class: App\Converter\StringToPdfConverter
         tags:
             - { name: request.param_converter, priority: -2, converter: string_to_file_converter }
     # makes classes in src/ available to be used as services
