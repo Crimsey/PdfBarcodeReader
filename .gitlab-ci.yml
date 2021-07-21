@@ -21,6 +21,8 @@ dependency:
         paths:
             - vendor
     script:
+        - mkdir /root/.ssh
+        - chmod 700 /root/.ssh
         - echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_rsa
         - export COMPOSER_AUTH=$COMPOSER_AUTHJSON
         - composer install --no-scripts --prefer-dist
