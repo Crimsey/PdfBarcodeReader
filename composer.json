@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.2.5",
+        "php": ">=8.0",
         "ext-ctype": "*",
         "ext-fileinfo": "*",
         "ext-iconv": "*",
@@ -21,7 +21,8 @@
         "symfony/framework-bundle": "*",
         "symfony/property-info": "5.3.*",
         "symfony/runtime": "*",
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
+      "ext-http": "*"
     },
     "config": {
         "optimize-autoloader": true,

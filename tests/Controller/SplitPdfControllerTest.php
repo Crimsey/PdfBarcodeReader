@@ -18,7 +18,7 @@ class SplitPdfControllerTest extends WebTestCase
         // Request a specific page
         $crawler = $client->request('POST', '/api/doc/splitpdfbarcode');
         $response = $client->getResponse();
-        var_dump($client->getResponse()->getStatusCode() . "- SplitPdfControllerTest");
+        var_dump($client->getResponse()->getStatusCode().'- SplitPdfControllerTest');
         // Validate a successful response and some content
         $this->assertResponseIsSuccessful();
         //$this->assertSelectorTextContains('h1', 'Hello World');

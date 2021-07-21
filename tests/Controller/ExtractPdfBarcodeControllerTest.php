@@ -16,10 +16,10 @@ class ExtractPdfBarcodeControllerTest extends WebTestCase
 
         // Request a specific page
         $crawler = $client->request('POST', '/api/doc/extractpdfbarcode');
-        var_dump($client->getResponse()->getStatusCode() . "- ExtractPdfBarcodeControllerTest");
+        var_dump($client->getResponse()->getStatusCode().'- ExtractPdfBarcodeControllerTest');
 
         // Validate a successful response and some content
-        $this->assertResponseIsSuccessful("200 - ExtractPdfBarcodeControllerTest");
+        $this->assertResponseIsSuccessful('200 - ExtractPdfBarcodeControllerTest');
         //$this->assertSelectorTextContains('h1', 'Hello World');
     }
 }

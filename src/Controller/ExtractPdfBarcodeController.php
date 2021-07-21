@@ -6,9 +6,14 @@ namespace App\Controller;
 
 //use App\Controller\AbstractAPIController;
 //use Swagger\Annotations as SWG;
+use http\Env\Request;
+use http\Exception\InvalidArgumentException;
 use OpenApi\Annotations as OA;
+use OpenApi\Annotations\Post;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ExtractPdfBarcodeController
@@ -48,7 +53,6 @@ class ExtractPdfBarcodeController
      *     @OA\Items(
      *     type="string",
      *     enum = {"answer", "testing", "my","array"}
-     *
      * )
      * )
      * )
@@ -57,9 +61,30 @@ class ExtractPdfBarcodeController
      *     response=400,
      *     description="This is not a PDF file",
      * )
+     *
+     * @Assert\File(
+     *     maxSize = "1024k",
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Please upload a valid PDF"
+     * )
+     *
+     * @ParamConverter("myfile", converter="string_to_file_converter")
+     *
      */
-    public function extract(): Response
+
+    public function extract(File $myfile): Response
     {
+        if($myfile === null) {
+            throw new BadRequestHttpException('File not provided');
+        }
+        if($myfile === base64_decode($myfile, true)){
+            echo '$myfile is base64';
+        } else{
+            echo '$myfile is NOT base64';
+            throw new InvalidArgumentException('Invalid argument - not base64');
+        }
+
+
         return new Response(
             '<html><body> POST </body></html>'
         );

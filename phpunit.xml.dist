@@ -8,7 +8,9 @@
     <php>
         <!--<server name="KERNEL_CLASS" value="App\Kernel" />-->
         <server name="APP_ENV" value="test"/>
+        <env name="APP_DEBUG" value="false" />
     </php>
+
     <testsuites>
         <testsuite name="platform">
             <directory>./tests</directory>
