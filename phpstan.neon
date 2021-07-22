@@ -1,0 +1,10 @@
+# https://confluence.webchili.in/pages/viewpage.action?pageId=129630212
+includes:
+    #- vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
+parameters:
+    paths:
+        - src
+        - tests
+    level: max
+    checkMissingIterableValueType: false
