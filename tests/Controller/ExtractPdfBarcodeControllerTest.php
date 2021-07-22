@@ -19,6 +19,7 @@ class ExtractPdfBarcodeControllerTest extends WebTestCase
         var_dump($client->getResponse()->getStatusCode().'- ExtractPdfBarcodeControllerTest');
 
         // Validate a successful response and some content
+        //this->self::assertEquals();
         $this->assertResponseIsSuccessful('200 - ExtractPdfBarcodeControllerTest');
         //$this->assertSelectorTextContains('h1', 'Hello World');
     }

@@ -18,11 +18,11 @@ class StringToPdfConverter implements ParamConverterInterface
     public function apply(Request $request, ParamConverter $configuration): bool
     {
         //public File $myfile = null;
-        $stringfile = $_POST['myfile'];
+        //$stringfile = $_POST['myfile'];
 
-        if (null === $stringfile) {
+        /*if (null === $stringfile) {
             throw new BadRequestHttpException('File not provided');
-        }
+        }*/
         /*else {
             if ($stringfile === base64_decode($stringfile, true)) {
                 echo '$myfile is base64';

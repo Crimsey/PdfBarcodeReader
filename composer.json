@@ -21,9 +21,8 @@
         "symfony/framework-bundle": "*",
         "symfony/property-info": "5.3.*",
         "symfony/runtime": "*",
-        "symfony/yaml": "*",
-      "ext-http": "*"
-    },
+        "symfony/yaml": "*"
+     },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": {
