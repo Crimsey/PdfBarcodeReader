@@ -1,0 +1,82 @@
+before_script:
+    - echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+    - export APP_ENV=test
+    - apk add --no-cache bash
+    - export CGO_ENABLED=0​
+stages:
+    - prepare
+    - lint
+    - test
+.only-code-ci: &only-code-ci
+    only:
+        - master
+        - merge_requests
+    except:
+        - tags​
+dependency:
+    stage: prepare
+    image:  crimsey/pdfbarcode
+    cache:
+        key: pdfbarcode
+        paths:
+            - vendor
+    script:
+        - mkdir /root/.ssh
+        - chmod 700 /root/.ssh
+        - echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_rsa
+        - export COMPOSER_AUTH=$COMPOSER_AUTHJSON
+        - composer install --no-scripts --prefer-dist
+        - php bin/console cache:clear
+        - composer clear-cache
+    tags:
+        - php
+    <<: *only-code-ci
+    
+tests:
+    stage: test
+    image: crimsey/pdfbarcode
+    cache:
+        key: pdfbarcode
+        paths:
+            - vendor
+        policy: pull
+    script:
+        - composer test-coverage-ci
+    artifacts:
+        when: always
+        paths:
+            - var/log
+        reports:
+            junit: phpunit_report.xml
+        expire_in: 1 day
+    tags:
+        - php
+    <<: *only-code-ci
+    
+code_style:
+    stage: lint
+    image:  crimsey/pdfbarcode
+    cache:
+        key: pdfbarcode
+        paths:
+            - vendor
+        policy: pull
+    script:
+        - composer style
+    tags:
+        - php
+    <<: *only-code-ci
+    
+code_quality:
+    stage: lint
+    image:  crimsey/pdfbarcode
+    cache:
+        key: pdfbarcode
+        paths:
+            - vendor
+        policy: pull
+    script:
+        - composer quality
+    tags:
+        - php
+    <<: *only-code-ci

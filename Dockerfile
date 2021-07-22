@@ -13,6 +13,7 @@ FROM php:${PHP_VERSION}-fpm-alpine AS symfony_php
 # persistent / runtime deps
 RUN apk add --no-cache \
 		acl \
+		bash \
 		fcgi \
 		file \
 		gettext \
@@ -142,4 +143,5 @@ RUN set -eux; \
 		echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
         echo "xdebug.client_host = host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
 		apk del .build-deps
+
 

@@ -1,10 +1,13 @@
 <?php
-// tests/Controller/PostControllerTest.php
+
+// tests/Controller/SplitPdfControllerTest.php
+
 namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
-class PostControllerTest extends WebTestCase
+class SplitPdfControllerTest extends WebTestCase
 {
     public function testSomething(): void
     {
@@ -13,10 +16,11 @@ class PostControllerTest extends WebTestCase
         $client = static::createClient();
 
         // Request a specific page
-        $crawler = $client->request('GET', '/firstcontroller');
-
+        $crawler = $client->request('POST', '/api/doc/splitpdfbarcode');
+        $response = $client->getResponse();
+        var_dump($client->getResponse()->getStatusCode().'- SplitPdfControllerTest');
         // Validate a successful response and some content
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Hello World');
+        //$this->assertSelectorTextContains('h1', 'Hello World');
     }
 }
