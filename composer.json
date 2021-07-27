@@ -21,8 +21,11 @@
         "symfony/framework-bundle": "*",
         "symfony/property-info": "5.3.*",
         "symfony/runtime": "*",
-        "symfony/yaml": "*"
-     },
+        "symfony/yaml": "*",
+        "setasign/fpdf": "1.8.*",
+        "setasign/fpdi": "^2.0"
+
+    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": {

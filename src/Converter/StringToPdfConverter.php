@@ -15,6 +15,19 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class StringToPdfConverter implements ParamConverterInterface
 {
+
+    protected File $bioFile;
+
+    public function setBioFile(File $file): void
+    {
+        $this->bioFile = $file;
+    }
+
+    public function getBioFile(): File
+    {
+        return $this->bioFile;
+    }
+
     public function apply(Request $request, ParamConverter $configuration): bool
     {
         //public File $myfile = null;
@@ -32,8 +45,30 @@ class StringToPdfConverter implements ParamConverterInterface
                 echo '$myfile is NOT base64';
 
             }*/
+        #$myfile = $request->query->get('myfile');#GET
+        $myfile = $request->request->get('myfile');#POST
 
-        $options = $configuration->getOptions();
+        /*if(null === $myfile ){
+            throw new \InvalidArgumentException('File is missing');
+        }
+
+        if(base64_decode(strval($myfile),false))
+        {
+            throw new \InvalidArgumentException('Cokolwiek');
+            //$bioFile=base64_decode($myfile);
+            //file_put_contents($bioFile);
+
+            //$bioFile=$myfile;
+            //$request->request->set($configuration->getName(),strval($this->getBioFile()));#jak zwrocic file'a???????????
+
+        }*/
+
+        //$this->setBioFile($bioFile);
+        //$this->setBioFile(base64_encode($bioFile));
+        //$new=base64_encode($myfile);
+
+
+        #$options = $configuration->getOptions();
 
         /*$options = $configuration->getOptions();
 
@@ -53,6 +88,8 @@ class StringToPdfConverter implements ParamConverterInterface
 
     public function supports(ParamConverter $configuration): bool
     {
+
+
         /*if (null === $configuration->getClass()) {
             return false;
         }

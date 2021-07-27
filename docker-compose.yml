@@ -36,7 +36,7 @@ services:
       SERVER_NAME: ${SERVER_NAME:-localhost, caddy:80}
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
-    restart: unless-stopped
+    
     volumes:
       - php_socket:/var/run/php
       - caddy_data:/data
@@ -51,9 +51,9 @@ services:
         published: 443
         protocol: tcp
       # HTTP/3
-      - target: 443
-        published: 443
-        protocol: udp
+      #- target: 443
+      #  published: 443
+      #  protocol: udp
 
 volumes:
   php_socket:

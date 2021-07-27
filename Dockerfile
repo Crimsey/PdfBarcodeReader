@@ -110,6 +110,12 @@ RUN set -eux; \
 	composer symfony:dump-env prod; \
 	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync
+
+RUN set -eux
+RUN apk update
+RUN	apk add poppler-utils
+RUN apk add zbar
+
 VOLUME /srv/app/var
 
 ENTRYPOINT ["docker-entrypoint"]
