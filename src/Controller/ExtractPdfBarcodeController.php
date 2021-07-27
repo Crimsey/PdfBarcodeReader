@@ -14,8 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-use Symfony\Component\Validator\Constraints as Assert;
-
 class ExtractPdfBarcodeController
 {
     /**
@@ -23,25 +21,15 @@ class ExtractPdfBarcodeController
      *
      * @Route("/api/doc/extractpdfbarcode", methods={"POST"})
      *
-    @OA\Parameter(
+     *  @OA\Parameter(
      *     name="myfile",
-     *     in="path",
+     *     in="query",
      *     description="PDF file with one/multiple barcodes",
      *     required=true,
      *      @OA\Schema(
      *             type="string",
      *             format="base64",
      *         )
-     * )
-    @OA\RequestBody(
-     *     description="Upload PDF file",
-     *     @OA\MediaType(
-     *      mediaType="application/octet-stream",
-     *     @OA\Schema(
-     *       type="string",
-     *       format="base64"
-     *      )
-     * )
      * )
      *
      * @OA\Response (
@@ -55,9 +43,6 @@ class ExtractPdfBarcodeController
      * )
      * )
      * )
-     *
-     *
-     *
      * @OA\Response (
      *     response=400,
      *     description="This is not a PDF file",
@@ -67,6 +52,7 @@ class ExtractPdfBarcodeController
      */
     public function extract(): Response
     {
+        var_dump('cokolwiek');
         /*if($myfile === null) {
             throw new BadRequestHttpException('File not provided');
         }

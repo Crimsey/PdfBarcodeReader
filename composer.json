@@ -13,6 +13,8 @@
         "doctrine/annotations": "^1.13",
         "nelmio/api-doc-bundle": "^4.3",
         "sensio/framework-extra-bundle": "^6.1",
+        "setasign/fpdf": "1.8.*",
+        "setasign/fpdi": "^2.0",
         "symfony/asset": "5.3.*",
         "symfony/console": "*",
         "symfony/css-selector": "5.3.*",
@@ -21,10 +23,7 @@
         "symfony/framework-bundle": "*",
         "symfony/property-info": "5.3.*",
         "symfony/runtime": "*",
-        "symfony/yaml": "*",
-        "setasign/fpdf": "1.8.*",
-        "setasign/fpdi": "^2.0"
-
+        "symfony/yaml": "*"
     },
     "config": {
         "optimize-autoloader": true,
