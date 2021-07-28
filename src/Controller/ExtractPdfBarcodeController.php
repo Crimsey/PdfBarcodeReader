@@ -10,6 +10,7 @@ use http\Exception\InvalidArgumentException;
 use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,10 +27,9 @@ class ExtractPdfBarcodeController
      *     in="query",
      *     description="PDF file with one/multiple barcodes",
      *     required=true,
-     *      @OA\Schema(
-     *             type="string",
-     *             format="base64",
-     *         )
+     *     @OA\Schema(
+     *             type="string"
+     *     )
      * )
      *
      * @OA\Response (
@@ -43,16 +43,17 @@ class ExtractPdfBarcodeController
      * )
      * )
      * )
+     *
      * @OA\Response (
      *     response=400,
      *     description="This is not a PDF file",
      * )
      *
-     * @ParamConverter("myfile", converter="string_to_file_converter")
+     * @ParamConverter(name="myfile", class="File", converter="string_to_file_converter")
      */
     public function extract(): Response
     {
-        var_dump('cokolwiek');
+
         /*if($myfile === null) {
             throw new BadRequestHttpException('File not provided');
         }
