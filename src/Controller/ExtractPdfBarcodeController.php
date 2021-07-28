@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\GetBarcode;
 
 class ExtractPdfBarcodeController
 {
@@ -51,9 +52,10 @@ class ExtractPdfBarcodeController
      *
      * @ParamConverter(name="myfile", class="File", converter="string_to_file_converter")
      */
-    public function extract(): Response
+    public function extract(string $filename): Response
     {
-
+        $file = new File(sys_get_temp_dir().'/'.$filename);
+        var_dump('$file: '.$file);
         /*if($myfile === null) {
             throw new BadRequestHttpException('File not provided');
         }
