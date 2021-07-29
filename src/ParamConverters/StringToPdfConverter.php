@@ -50,7 +50,7 @@ class StringToPdfConverter implements ParamConverterInterface
             return false;
         }
 
-        return is_subclass_of($configuration->getClass(), File::class);
+        return $configuration->getClass() === File::class;
     }
 
 }

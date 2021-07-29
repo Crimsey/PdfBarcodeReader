@@ -12,6 +12,7 @@ use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -62,7 +63,7 @@ class ExtractPdfBarcodeController
      */
     //private  CreateImage $createImage;
 
-    public function extract(File $pdffile): Response
+    public function extract(File $pdffile): JsonResponse
     {
         $fileinpdf = new File($pdffile);
         //var_dump('$file: '.$file);
@@ -82,8 +83,8 @@ class ExtractPdfBarcodeController
             throw new InvalidArgumentException('Invalid argument - not base64');
         }
 */
-        return new Response(
-            '<html><body> POST </body></html>'
+        return new JsonResponse(
+            [0,1,1]
         );
     }
 }
