@@ -100,6 +100,8 @@ RUN composer create-project "${SKELETON} ${SYMFONY_VERSION}" . --stability=$STAB
 
 ###> recipes ###
 ###< recipes ###
+RUN	apk add poppler-utils
+RUN apk add zbar
 
 COPY . .
 
@@ -111,10 +113,7 @@ RUN set -eux; \
 	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync
 
-RUN set -eux
-RUN apk update
-RUN	apk add poppler-utils
-RUN apk add zbar
+
 
 VOLUME /srv/app/var
 

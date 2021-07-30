@@ -11,6 +11,7 @@ use http\Exception\InvalidArgumentException;
 use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,8 +20,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Service\GetBarcode;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ExtractPdfBarcodeController
+class ExtractPdfBarcodeController extends AbstractController
 {
+    private CreateImage $createImage;
+    public function  __construct(CreateImage $createImage)
+    {
+        $this->createImage = $createImage;
+    }
     /*private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container) // <- Add this
@@ -63,14 +69,14 @@ class ExtractPdfBarcodeController
      */
     //private  CreateImage $createImage;
 
-    public function extract(File $pdffile): JsonResponse
+    public function extract(File $pdffile, CreateImage $createImage): JsonResponse
     {
         $fileinpdf = new File($pdffile);
         //var_dump('$file: '.$file);
         //$this->container->getParameter('process');
 
-        //$createImage->getImage($file);
-        //var_dump($createImage);
+        $jpeg = $createImage->getImage($fileinpdf);
+        var_dump('$jestesmy tu: '.$jpeg);
         //$createImage->g
 
         /*if($myfile === null) {

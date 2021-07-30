@@ -1,8 +1,10 @@
 <?php
 namespace  App\Service;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 
 class CreateImage
@@ -14,21 +16,35 @@ class CreateImage
         $this->fileinpdf=$fileinpdf;
     }*/
 
-    private ParameterBagInterface $params;
+    /*private ParameterBagInterface $params;
 
     public function __construct(ParameterBagInterface $params)
     {
         $this->params = $params;
-    }
+    }*/
 
 
-    public function  getImage(): Process
+    public function  getImage(File $fileinpdf): File
     {
-        $fileinpdf = strval($this->params->get('myfile'));
+        $filesystem = new Filesystem();
 
-        $process = new Process(['pdftoppm -f 1 -r 300 -jpeg quality=100 '.$fileinpdf]);
+        $filesystem->chmod($fileinpdf,777);
+        //$process = new Process(['zbarimg '.$fileinpdf->getFilename(),'/tmp']);
+        $process = new Process(['pdftoppm', '-jpeg', $fileinpdf->getFilename(),$fileinpdf->getBasename('.pdf')],'/tmp');
+        //$process->setInput($fileinpdf->getFilename());
+        //$process->addOutput($fileinpdf->getBasename('.pdf'));
+        //$process = new Process(['ls','-la','/tmp']);
+        $process->run();
+
+        // executes after the command finishes
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
         //$process = new Process('pdftoppm','-f 1 -r 300 -jpeg quality=100',$file);
         //return new Process(['pdftoppm -f 1 -r 300 -jpeg quality=100 '.$fileinpdf]);
-        return $process;
+        //file_put_contents(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf'),$process->getOutput());
+        //return $process->getOutput();
+        //return true;
+        return new File(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf').'-1.jpg');
     }
 }
