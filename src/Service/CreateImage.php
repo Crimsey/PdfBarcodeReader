@@ -29,14 +29,11 @@ class CreateImage
         $filesystem = new Filesystem();
 
         $filesystem->chmod($fileinpdf,777);
-        //$process = new Process(['zbarimg '.$fileinpdf->getFilename(),'/tmp']);
-        $process = new Process(['pdftoppm', '-jpeg', $fileinpdf->getFilename(),$fileinpdf->getBasename('.pdf')],'/tmp');
-        //$process->setInput($fileinpdf->getFilename());
-        //$process->addOutput($fileinpdf->getBasename('.pdf'));
-        //$process = new Process(['ls','-la','/tmp']);
+        //$process = new Process(['pdftoppm','f -1', '-png', $fileinpdf->getFilename(),$fileinpdf->getBasename('.pdf')],'/tmp');
+        $process = new Process(['pdftoppm','-png', $fileinpdf->getFilename(),$fileinpdf->getBasename('.pdf')],'/tmp');
+
         $process->run();
 
-        // executes after the command finishes
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
@@ -45,6 +42,6 @@ class CreateImage
         //file_put_contents(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf'),$process->getOutput());
         //return $process->getOutput();
         //return true;
-        return new File(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf').'-1.jpg');
+        return new File(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf').'-1.png');
     }
 }

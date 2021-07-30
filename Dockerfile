@@ -102,6 +102,7 @@ RUN composer create-project "${SKELETON} ${SYMFONY_VERSION}" . --stability=$STAB
 ###< recipes ###
 RUN	apk add poppler-utils
 RUN apk add zbar
+RUN apk add ghostscript
 
 COPY . .
 

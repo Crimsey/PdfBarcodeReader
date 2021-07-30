@@ -23,9 +23,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ExtractPdfBarcodeController extends AbstractController
 {
     private CreateImage $createImage;
-    public function  __construct(CreateImage $createImage)
+    private  GetBarcode $getBarcode;
+    public function  __construct(CreateImage $createImage,GetBarcode $getBarcode)
     {
         $this->createImage = $createImage;
+        $this->getBarcode = $getBarcode;
+
     }
     /*private ContainerInterface $container;
 
@@ -69,7 +72,7 @@ class ExtractPdfBarcodeController extends AbstractController
      */
     //private  CreateImage $createImage;
 
-    public function extract(File $pdffile, CreateImage $createImage): JsonResponse
+    public function extract(File $pdffile, CreateImage $createImage, GetBarcode $getBarcode): JsonResponse
     {
         $fileinpdf = new File($pdffile);
         //var_dump('$file: '.$file);
@@ -77,6 +80,10 @@ class ExtractPdfBarcodeController extends AbstractController
 
         $jpeg = $createImage->getImage($fileinpdf);
         var_dump('$jestesmy tu: '.$jpeg);
+
+        $barcode = $getBarcode->getBarocde($jpeg);
+        var_dump('barcode: '.$barcode);
+
         //$createImage->g
 
         /*if($myfile === null) {
