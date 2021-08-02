@@ -7,35 +7,34 @@ namespace App\Controller;
 //use App\Controller\AbstractAPIController;
 //use Swagger\Annotations as SWG;
 use OpenApi\Annotations as OA;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\PdfParserException;
+use setasign\Fpdi\PdfReader\PdfReaderException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SplitPdfController
 {
     /**
-     * Split PDF file, regarding the table of barcodes.
+     * Parse a PDF file and extract the table of barcodes.
      *
      * @Route("/api/doc/splitpdfbarcode", methods={"POST"})
      *
      * @OA\Parameter(
-     *     name="BarcodeTable",
-     *     in="path",
-     *     description="Table of barcodes",
+     *     name="pdf",
+     *     in="query",
+     *     description="PDF",
      *     required=true,
-     *      @OA\Schema(
-     *             type="array",
-     *             @OA\Items(
-     *              type="string",
-     *              enum = {"question", "testing", "my","array"}
-     *         )
-     *      )
+     *     @OA\Schema(
+     *             type="string"
+     *     )
      * )
      *
-     * @OA\RequestBody(
-     *     description="Parse the table of barcodes",
-     *     @OA\MediaType(
-     *      mediaType="application/json",
-     *     @OA\Schema(
+     * @OA\Response (
+     *     response=201,
+     *     description="elo",
+     *     @OA\JsonContent(
      *     type="array",
      *     @OA\Items(
      *     type="string",
@@ -43,24 +42,39 @@ class SplitPdfController
      * )
      * )
      * )
-     * )
      *
      * @OA\Response (
-     *     response=200,
-     *     description="You have just splitted a PDF file",
-     *    @OA\MediaType(
-     *      mediaType="application/octet-stream",
-     *     @OA\Schema(
-     *       type="string",
-     *       format="base64"
-     *      )
+     *     response=401,
+     *     description="nope",
      * )
-     * )
+     * @throws PdfParserException|PdfReaderException
      */
-    public function split(): Response
-    {
-        return new Response(
-            '<html><body> POST </body></html>'
+    public function splitting(): JsonResponse
+    {    // initiate FPDI
+        $pdf = new Fpdi();
+
+        // get the page count
+        $pageCount = $pdf->setSourceFile('/tmp/Sokol6107a19a28bd08.59446405.pdf');
+
+        // iterate through all pages
+        for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+            // import a page
+            $templateId = $pdf->importPage($pageNo);
+
+            $pdf->AddPage();
+            // use the imported page and adjust the page size
+            $pdf->useTemplate($templateId, ['adjustPageSize' => true]);
+
+            $pdf->SetFont('Helvetica');
+            $pdf->SetXY(5, 5);
+            $pdf->Write(8, 'A complete document imported with FPDI');
+        }
+
+        // Output the new PDF
+        $pdf->Output();
+
+        return new JsonResponse(
+            [0, 1, 1]
         );
     }
 }

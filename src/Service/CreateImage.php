@@ -33,7 +33,7 @@ class CreateImage
         $process = new Process(['pdftoppm','-png', $fileinpdf->getFilename(),$fileinpdf->getBasename('.pdf')],'/tmp');
 
         $process->run();
-
+        //var_dump('cokolwiek: ',$process->getOutput());
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
