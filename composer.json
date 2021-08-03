@@ -80,8 +80,8 @@
         ],
         "style": "php-cs-fixer fix --dry-run --diff",
         "style-fix": "php-cs-fixer fix",
-        "quality": "phpstan analyse -c phpstan.neon",
-        "quality-ci": "phpstan analyse -c phpstan.neon --error-format gitlab > quality-report.json",
+        "quality": "phpstan analyse -c phpstan.neon --memory-limit 1G",
+        "quality-ci": "phpstan analyse -c phpstan.neon --memory-limit 1G --error-format gitlab > quality-report.json ",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-text",
         "test-coverage-ci": [

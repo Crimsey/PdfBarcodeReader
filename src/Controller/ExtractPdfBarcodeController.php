@@ -43,7 +43,6 @@ class ExtractPdfBarcodeController extends AbstractController
      *
      * @Route("/api/doc/extractpdfbarcode", methods={"POST"})
      *
-     *
      * @OA\RequestBody(
      *       @OA\MediaType(
      *           mediaType="application/x-www-form-urlencoded",
