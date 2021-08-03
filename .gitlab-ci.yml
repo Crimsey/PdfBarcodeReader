@@ -15,7 +15,7 @@ stages:
         - tags​
 dependency:
     stage: prepare
-    image:  crimsey/pdfbarcode
+    image:  crimsey/pdfbarcode:v1.0.0
     cache:
         key: pdfbarcode
         paths:
@@ -34,7 +34,7 @@ dependency:
     
 tests:
     stage: test
-    image: crimsey/pdfbarcode
+    image: crimsey/pdfbarcode:v1.0.0
     cache:
         key: pdfbarcode
         paths:
@@ -55,7 +55,7 @@ tests:
     
 code_style:
     stage: lint
-    image:  crimsey/pdfbarcode
+    image:  crimsey/pdfbarcode:v1.0.0
     cache:
         key: pdfbarcode
         paths:
@@ -69,7 +69,7 @@ code_style:
     
 code_quality:
     stage: lint
-    image:  crimsey/pdfbarcode
+    image:  crimsey/pdfbarcode:v1.0.0
     cache:
         key: pdfbarcode
         paths:

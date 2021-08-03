@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Process\Process;
 
 //use JMS\SerializerBundle\Serializer\SerializerInterface;
 
@@ -22,15 +23,14 @@ class StringToPdfConverter implements ParamConverterInterface
 
         if (null !== $myfile) {
             $file_decoded = base64_decode(strval($myfile));
-            //var_dump('$file_decoded: '.$file_decoded);
+            var_dump('$file_decoded: '.$file_decoded);
             //var_dump('$filename: '.$filename);
             file_put_contents(sys_get_temp_dir().'/'.$filename, $file_decoded);
             $fileinpdf = new File(sys_get_temp_dir().'/'.$filename);
 
-            //$new = file_put_contents(sys_get_temp_dir().'/'.$filename,$file_decoded);
-            //var_dump('C:/Users/jakub.sokol/Desktop'.'/'.'$filename: '.sys_get_temp_dir().'/'.$filename);
+            //$myprocess = new Process(['gs -o repaired.pdf -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress corrupted.pdf'],'/tmp');
 
-            //var_dump('$new: '.$new);
+
             $request->attributes->set($configuration->getName(), $fileinpdf);
         } else {
             file_put_contents(sys_get_temp_dir().'/'.$filename, '');

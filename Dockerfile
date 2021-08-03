@@ -100,14 +100,10 @@ RUN composer create-project "${SKELETON} ${SYMFONY_VERSION}" . --stability=$STAB
 
 ###> recipes ###
 ###< recipes ###
-RUN	apk add poppler-utils
+RUN apk add poppler-utils
 RUN apk add zbar
 RUN apk add ghostscript
 RUN apk add imagemagick
-#RUN apk add openjdk8
-#RUN wget https://gitlab.com/pdftk-java/pdftk/-/jobs/924565145/artifacts/raw/build/libs/pdftk-all.jar
-#RUN mv pdftk-all.jar pdftk.jar
-
 
 COPY . .
 
