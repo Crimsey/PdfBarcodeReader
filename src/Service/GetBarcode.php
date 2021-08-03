@@ -1,14 +1,16 @@
 <?php
-    namespace  App\Service;
+
+namespace  App\Service;
+
     use Symfony\Component\HttpFoundation\File\File;
     use Symfony\Component\Process\Exception\ProcessFailedException;
     use Symfony\Component\Process\Process;
 
     class GetBarcode
     {
-        public function  getBarocde(File $imagefile): string
+        public function getBarocde(File $imagefile): string
         {
-            $process = new Process(['zbarimg',$imagefile->getFilename()],'/tmp');
+            $process = new Process(['zbarimg', $imagefile->getFilename()], '/tmp');
 
             $process->run();
 

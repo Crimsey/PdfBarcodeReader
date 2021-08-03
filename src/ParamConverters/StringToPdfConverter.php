@@ -7,50 +7,43 @@ declare(strict_types=1);
 namespace App\ParamConverters;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use setasign\Fpdi\PdfParser\PdfParserException;
-use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Validator\Constraints as Assert;
-
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-//use JMS\SerializerBundle\Serializer\SerializerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
+//use JMS\SerializerBundle\Serializer\SerializerInterface;
 
 class StringToPdfConverter implements ParamConverterInterface
 {
-
     public function apply(Request $request, ParamConverter $configuration): bool
     {
-
-
         $myfile = $request->query->get('myfile');
-        $file_decoded=base64_decode(strval($myfile));
-        var_dump('$file_decoded: '.$file_decoded);
-        $filename = uniqid('Sokol', true) . '.pdf';
-        //var_dump('$filename: '.$filename);
-        file_put_contents(sys_get_temp_dir().'/'.$filename,$file_decoded);
-        $fileinpdf = new File(sys_get_temp_dir().'/'.$filename);
+        $filename = uniqid('Sokol', true).'.pdf';
 
-        //$new = file_put_contents(sys_get_temp_dir().'/'.$filename,$file_decoded);
-        //var_dump('C:/Users/jakub.sokol/Desktop'.'/'.'$filename: '.sys_get_temp_dir().'/'.$filename);
+        if (null !== $myfile) {
+            $file_decoded = base64_decode(strval($myfile));
+            //var_dump('$file_decoded: '.$file_decoded);
+            //var_dump('$filename: '.$filename);
+            file_put_contents(sys_get_temp_dir().'/'.$filename, $file_decoded);
+            $fileinpdf = new File(sys_get_temp_dir().'/'.$filename);
 
-        //var_dump('$new: '.$new);
-        $request->attributes->set($configuration->getName(),$fileinpdf);
+            //$new = file_put_contents(sys_get_temp_dir().'/'.$filename,$file_decoded);
+            //var_dump('C:/Users/jakub.sokol/Desktop'.'/'.'$filename: '.sys_get_temp_dir().'/'.$filename);
+
+            //var_dump('$new: '.$new);
+            $request->attributes->set($configuration->getName(), $fileinpdf);
+        } else {
+            file_put_contents(sys_get_temp_dir().'/'.$filename, '');
+
+            $request->attributes->set($configuration->getName(), new File(sys_get_temp_dir().'/'.$filename));
+            //return false;
+        }
 
         return true;
     }
 
     public function supports(ParamConverter $configuration)
     {
-        if (null === $configuration->getClass()) {
-            return false;
-        }
-
-        return $configuration->getClass() === File::class;
+        return File::class === $configuration->getClass();
     }
-
 }

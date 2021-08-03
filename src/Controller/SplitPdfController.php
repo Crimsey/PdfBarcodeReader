@@ -6,20 +6,16 @@ namespace App\Controller;
 
 //use App\Controller\AbstractAPIController;
 //use Swagger\Annotations as SWG;
-use _PHPStan_8f2e45ccf\Composer\XdebugHandler\Process;
 use OpenApi\Annotations as OA;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\PdfParserException;
-use setasign\Fpdi\PdfParser\StreamReader;
 use setasign\Fpdi\PdfReader\PdfReaderException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use function _PHPStan_8f2e45ccf\RingCentral\Psr7\parse_query;
-
 
 class SplitPdfController extends AbstractController
 {
@@ -56,56 +52,54 @@ class SplitPdfController extends AbstractController
      *     response=401,
      *     description="nope",
      * )
+     *
      * @throws PdfParserException
      * @throws PdfReaderException
      */
-
     public function splitting(File $myfile): JsonResponse
     {
-       //$pdf = $_GET['pdf'];
-       //var_dump('$variable: '.$pdf);
+        //$pdf = $_GET['pdf'];
+        //var_dump('$variable: '.$pdf);
 
-        $myprocess = new \Symfony\Component\Process\Process(['gs \
-                                -o repaired.pdf \
-                                -sDEVICE=pdfwrite \
-                                -dPDFSETTINGS=/prepress \
-                                 corrupted.pdf']);
+        /*  $myprocess = new \Symfony\Component\Process\Process(['gs \
+                                  -o repaired.pdf \
+                                  -sDEVICE=pdfwrite \
+                                  -dPDFSETTINGS=/prepress \
+                                   corrupted.pdf']);
 
 
-        $fpdi = new Fpdi();
+          $fpdi = new Fpdi();
 
-        var_dump('/tmp/ $pdf->getFilename(): /tmp/'.$myfile->getFilename());
-        $pageCount = $fpdi->setSourceFile('/tmp/'.$myfile->getFilename());
+          var_dump('/tmp/ $pdf->getFilename(): /tmp/'.$myfile->getFilename());
+          $pageCount = $fpdi->setSourceFile('/tmp/'.$myfile->getFilename());
 
-        //@throws PdfParserException|PdfReaderException
-        // initiate FPDI
-        //$pdf = new Fpdi();
+          //@throws PdfParserException|PdfReaderException
+          // initiate FPDI
+          //$pdf = new Fpdi();
 
-        // get the page count
-        //$pageCount = $pdf->setSourceFile('/tmp/Sokol6107a19a28bd08.59446405.pdf');
+          // get the page count
+          //$pageCount = $pdf->setSourceFile('/tmp/Sokol6107a19a28bd08.59446405.pdf');
 
-        // iterate through all pages
-        for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-            // import a page
-            $templateId = $fpdi->importPage($pageNo);
+          // iterate through all pages
+          for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+              // import a page
+              $templateId = $fpdi->importPage($pageNo);
 
-            $fpdi->AddPage();
-            // use the imported page and adjust the page size
-            $fpdi->useTemplate($templateId, ['adjustPageSize' => true]);
+              $fpdi->AddPage();
+              // use the imported page and adjust the page size
+              $fpdi->useTemplate($templateId, ['adjustPageSize' => true]);
 
-            $fpdi->SetFont('Helvetica');
-            $fpdi->SetXY(5, 5);
-            $fpdi->Write(8, 'A complete document imported with FPDI');
-        }
+              $fpdi->SetFont('Helvetica');
+              $fpdi->SetXY(5, 5);
+              $fpdi->Write(8, 'A complete document imported with FPDI');
+          }
 
-        // Output the new PDF
-        $fpdi->Output();
-
+          // Output the new PDF
+          $fpdi->Output();
+*/
 
         return new JsonResponse(
             [0, 1, 1]
         );
     }
-
-
 }

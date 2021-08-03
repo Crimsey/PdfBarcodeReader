@@ -7,29 +7,30 @@ namespace App\Controller;
 //use App\Controller\AbstractAPIController;
 //use Swagger\Annotations as SWG;
 use App\Service\CreateImage;
+use App\Service\GetBarcode;
 use http\Exception\InvalidArgumentException;
 use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\GetBarcode;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ExtractPdfBarcodeController extends AbstractController
 {
     private CreateImage $createImage;
-    private  GetBarcode $getBarcode;
-    public function  __construct(CreateImage $createImage,GetBarcode $getBarcode)
+    private GetBarcode $getBarcode;
+
+    public function __construct(CreateImage $createImage, GetBarcode $getBarcode)
     {
         $this->createImage = $createImage;
         $this->getBarcode = $getBarcode;
-
     }
+
     /*private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container) // <- Add this
@@ -74,15 +75,16 @@ class ExtractPdfBarcodeController extends AbstractController
 
     public function extract(File $pdffile, CreateImage $createImage, GetBarcode $getBarcode): JsonResponse
     {
-        $fileinpdf = new File($pdffile);
-        //var_dump('$file: '.$file);
-        //$this->container->getParameter('process');
+        if ($pdffile->getSize() > 0) {
+            $fileinpdf = new File($pdffile);
+            //var_dump('$file: '.$file);
 
-        $jpeg = $createImage->getImage($fileinpdf);
-        var_dump('$jestesmy tu: '.$jpeg);
+            $jpeg = $createImage->getImage($fileinpdf);
+            //var_dump('$jestesmy tu: '.$jpeg);
 
-        $barcode = $getBarcode->getBarocde($jpeg);
-        var_dump('barcode: '.$barcode);
+            $barcode = $getBarcode->getBarocde($jpeg);
+            var_dump('barcode: '.$barcode);
+        }
 
         //$createImage->g
 
@@ -97,7 +99,7 @@ class ExtractPdfBarcodeController extends AbstractController
         }
 */
         return new JsonResponse(
-            [0,1,1]
+            [0, 1, 1]
         );
     }
 }
