@@ -6,16 +6,38 @@ namespace App\Controller;
 
 //use App\Controller\AbstractAPIController;
 //use Swagger\Annotations as SWG;
+use App\Service\CreateImage;
+use App\Service\GetBarcode;
 use http\Exception\InvalidArgumentException;
 use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ExtractPdfBarcodeController
+class ExtractPdfBarcodeController extends AbstractController
 {
+    private CreateImage $createImage;
+    private GetBarcode $getBarcode;
+
+    public function __construct(CreateImage $createImage, GetBarcode $getBarcode)
+    {
+        $this->createImage = $createImage;
+        $this->getBarcode = $getBarcode;
+    }
+
+    /*private ContainerInterface $container;
+
+    public function __construct(ContainerInterface $container) // <- Add this
+    {
+        $this->container = $container;
+    }*/
+
     /**
      * Parse a PDF file and extract the table of barcodes.
      *
@@ -23,24 +45,12 @@ class ExtractPdfBarcodeController
      *
      * @OA\Parameter(
      *     name="myfile",
-     *     in="path",
+     *     in="query",
      *     description="PDF file with one/multiple barcodes",
      *     required=true,
-     *      @OA\Schema(
-     *             type="string",
-     *             format="base64",
-     *         )
-     * )
-     *
-     * @OA\RequestBody(
-     *     description="Upload PDF file",
-     *     @OA\MediaType(
-     *      mediaType="application/octet-stream",
      *     @OA\Schema(
-     *       type="string",
-     *       format="base64"
-     *      )
-     * )
+     *             type="string"
+     *     )
      * )
      *
      * @OA\Response (
@@ -59,11 +69,25 @@ class ExtractPdfBarcodeController
      *     response=400,
      *     description="This is not a PDF file",
      * )
-     *
-     * @ParamConverter("myfile", converter="string_to_file_converter")
+     * @ParamConverter(name="pdffile", converter="string_to_file_converter")
      */
-    public function extract(): Response
+    //private  CreateImage $createImage;
+
+    public function extract(File $pdffile, CreateImage $createImage, GetBarcode $getBarcode): JsonResponse
     {
+        if ($pdffile->getSize() > 0) {
+            $fileinpdf = new File($pdffile);
+            //var_dump('$file: '.$file);
+
+            $jpeg = $createImage->getImage($fileinpdf);
+            //var_dump('$jestesmy tu: '.$jpeg);
+
+            $barcode = $getBarcode->getBarocde($jpeg);
+            var_dump('barcode: '.$barcode);
+        }
+
+        //$createImage->g
+
         /*if($myfile === null) {
             throw new BadRequestHttpException('File not provided');
         }
@@ -74,8 +98,8 @@ class ExtractPdfBarcodeController
             throw new InvalidArgumentException('Invalid argument - not base64');
         }
 */
-        return new Response(
-            '<html><body> POST </body></html>'
+        return new JsonResponse(
+            [0, 1, 1]
         );
     }
 }
