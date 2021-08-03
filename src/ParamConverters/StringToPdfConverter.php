@@ -30,7 +30,6 @@ class StringToPdfConverter implements ParamConverterInterface
 
             //$myprocess = new Process(['gs -o repaired.pdf -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress corrupted.pdf'],'/tmp');
 
-
             $request->attributes->set($configuration->getName(), $fileinpdf);
         } else {
             file_put_contents(sys_get_temp_dir().'/'.$filename, '');
