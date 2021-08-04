@@ -18,12 +18,12 @@ class StringToPdfConverter implements ParamConverterInterface
 {
     public function apply(Request $request, ParamConverter $configuration): bool
     {
-        $myfile = $request->query->get('myfile');
+        $myfile = $request->request->get('myfile');
         $filename = uniqid('Sokol', true).'.pdf';
 
-        if (null !== $myfile) {
-            $file_decoded = base64_decode(strval($myfile));
-            var_dump('$file_decoded: '.$file_decoded);
+        if (null !== $myfile && is_string($myfile)) {
+            $file_decoded = base64_decode($myfile);
+            //var_dump('$file_decoded: '.htmlspecialchars_decode($myfile));
             //var_dump('$filename: '.$filename);
             file_put_contents(sys_get_temp_dir().'/'.$filename, $file_decoded);
             $fileinpdf = new File(sys_get_temp_dir().'/'.$filename);

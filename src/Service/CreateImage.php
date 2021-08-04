@@ -1,6 +1,6 @@
 <?php
 
-namespace  App\Service;
+namespace App\Service;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;

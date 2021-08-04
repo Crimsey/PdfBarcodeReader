@@ -43,13 +43,21 @@ class ExtractPdfBarcodeController extends AbstractController
      *
      * @Route("/api/doc/extractpdfbarcode", methods={"POST"})
      *
-     * @OA\Parameter(
-     *     name="myfile",
-     *     in="query",
-     *     description="PDF file with one/multiple barcodes",
-     *     required=true,
-     *     @OA\Schema(
-     *             type="string"
+     * @OA\RequestBody(
+     *       @OA\MediaType(
+     *           mediaType="application/x-www-form-urlencoded",
+     *           @OA\Schema(
+     *               type="object",
+     *               required={"myfile"},
+     *               @OA\Property(
+     *                   property="myfile",
+     *                   description="PDF file with one/multiple barcodes",
+     *                   @OA\Schema(
+     *                      type="string",
+     *                      format="base64"
+     *                   )
+     *               )
+     *           )
      *     )
      * )
      *
