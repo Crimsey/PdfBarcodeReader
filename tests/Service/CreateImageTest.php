@@ -9,6 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\File\File;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
+
 class CreateImageTest extends KernelTestCase
 {
     public function testSomething(): void
@@ -20,7 +23,7 @@ class CreateImageTest extends KernelTestCase
         $container = static::getContainer();
 
         // (3) run some service & test the result
-        $createImage = $container->get(CreateImage::class);
+        $createImage = $container->get('create_image_container');
         var_dump($createImage);
 
         $fileinpdf = $container->getParameter('fileinpdf');

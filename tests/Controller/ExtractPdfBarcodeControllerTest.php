@@ -22,5 +22,9 @@ class ExtractPdfBarcodeControllerTest extends WebTestCase
         //this->self::assertEquals();
         $this->assertResponseIsSuccessful('200 - ExtractPdfBarcodeControllerTest');
         //$this->assertSelectorTextContains('h1', 'Hello World');
+
+        $crawler->selectButton('try-out__btn');
     }
+
+
 }

@@ -14,6 +14,7 @@ use OpenApi\Annotations\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,21 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ExtractPdfBarcodeController extends AbstractController
 {
-    private CreateImage $createImage;
-    private GetBarcode $getBarcode;
-
-    public function __construct(CreateImage $createImage, GetBarcode $getBarcode)
-    {
-        $this->createImage = $createImage;
-        $this->getBarcode = $getBarcode;
-    }
-
-    /*private ContainerInterface $container;
-
-    public function __construct(ContainerInterface $container) // <- Add this
-    {
-        $this->container = $container;
-    }*/
 
     /**
      * Parse a PDF file and extract the table of barcodes.
@@ -79,35 +65,30 @@ class ExtractPdfBarcodeController extends AbstractController
      * )
      * @ParamConverter(name="pdffile", converter="string_to_file_converter")
      */
-    //private  CreateImage $createImage;
 
     public function extract(File $pdffile, CreateImage $createImage, GetBarcode $getBarcode): JsonResponse
     {
         if ($pdffile->getSize() > 0) {
-            $fileinpdf = new File($pdffile);
-            //var_dump('$file: '.$file);
+            try {
+                $fileinpdf = new File($pdffile);
+                $jpeg = $createImage->getImage($fileinpdf);
+                $barcode = $getBarcode->getBarcode($jpeg);
+                $new_arr = preg_split("/[\s,]+/", $barcode);
 
-            $jpeg = $createImage->getImage($fileinpdf);
-            //var_dump('$jestesmy tu: '.$jpeg);
+                var_dump('arr: ');
+                var_dump($new_arr);
+                return new JsonResponse(
+                    json_encode($new_arr,JSON_HEX_QUOT)
+                );
+            }catch (FileNotFoundException $fileNotFoundException){
+                echo $fileNotFoundException->getMessage();
+            }
 
-            $barcode = $getBarcode->getBarocde($jpeg);
-            var_dump('barcode: '.$barcode);
         }
-
-        //$createImage->g
-
-        /*if($myfile === null) {
-            throw new BadRequestHttpException('File not provided');
-        }
-        if($myfile === base64_decode($myfile, true)){
-            echo '$myfile is base64';
-        } else{
-            echo '$myfile is NOT base64';
-            throw new InvalidArgumentException('Invalid argument - not base64');
-        }
-*/
-        return new JsonResponse(
-            [0, 1, 1]
-        );
+            return new JsonResponse(
+                ['ERROR']
+            );
     }
+
+
 }
