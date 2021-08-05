@@ -12,12 +12,12 @@ class CreateImage
     public function getImage(File $fileinpdf): File
     {
         if ($fileinpdf->getSize() > 0) {
-            var_dump("fileinpdf->getRealPath(): ".$fileinpdf->getRealPath());
-            var_dump("fileinpdf->getPath(): ".$fileinpdf->getPath());
-            var_dump("fileinpdf->getPathInfo(): ".$fileinpdf->getPathInfo());
+            var_dump('fileinpdf->getRealPath(): '.$fileinpdf->getRealPath());
+            var_dump('fileinpdf->getPath(): '.$fileinpdf->getPath());
+            var_dump('fileinpdf->getPathInfo(): '.$fileinpdf->getPathInfo());
 
             $process = new Process(['pdftoppm', '-png', '-r', '300',
-                $fileinpdf->getPath().'/'.$fileinpdf->getFilename(), $fileinpdf->getBasename('.pdf')]);
+                $fileinpdf->getPath().'/'.$fileinpdf->getFilename(), $fileinpdf->getBasename('.pdf'), ]);
 
             $process->run();
             if (!$process->isSuccessful()) {
