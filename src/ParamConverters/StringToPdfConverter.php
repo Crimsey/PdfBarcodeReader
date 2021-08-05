@@ -11,7 +11,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInte
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Process\Process;
 
 class StringToPdfConverter implements ParamConverterInterface
 {
@@ -26,8 +25,6 @@ class StringToPdfConverter implements ParamConverterInterface
             file_put_contents(sys_get_temp_dir().'/'.$filename, $file_decoded);
             $fileinpdf = new File(sys_get_temp_dir().'/'.$filename);
             $request->attributes->set($configuration->getName(), $fileinpdf);
-
-
         } else {
             //pass the empty file with correct name:
             file_put_contents(sys_get_temp_dir().'/'.$filename, '');

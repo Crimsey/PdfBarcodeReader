@@ -17,9 +17,5 @@ class ExtractPdfBarcodeControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful('200 - ExtractPdfBarcodeControllerTest');
         $crawler->selectButton('try-out__btn');
-
-
     }
-
-
 }

@@ -8,24 +8,19 @@ namespace App\Controller;
 //use Swagger\Annotations as SWG;
 use App\Service\CreateImage;
 use App\Service\GetBarcode;
-use http\Exception\InvalidArgumentException;
 use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Filesystem\Filesystem;
 
 class ExtractPdfBarcodeController extends AbstractController
 {
-
     /**
      * Parse a PDF file and extract the table of barcodes.
      *
@@ -67,7 +62,6 @@ class ExtractPdfBarcodeController extends AbstractController
      * )
      * @ParamConverter(name="pdffile", converter="string_to_file_converter")
      */
-
     public function extract(File $pdffile, CreateImage $createImage, GetBarcode $getBarcode): JsonResponse
     {
         if ($pdffile->getSize() > 0) {
@@ -75,7 +69,7 @@ class ExtractPdfBarcodeController extends AbstractController
                 $fileinpdf = new File($pdffile);
                 $jpeg = $createImage->getImage($fileinpdf);
                 $barcode = $getBarcode->getBarcode($jpeg);
-                $pieces = explode("\n",$barcode);
+                $pieces = explode("\n", $barcode);
                 /*var_dump($pieces);
                 $newArray =array() ?? "";
                 foreach ($pieces as $lineNum => $line)
@@ -94,15 +88,13 @@ class ExtractPdfBarcodeController extends AbstractController
                     //json_encode($newArray)
                     json_encode($pieces)
                 );
-            }catch (FileNotFoundException $fileNotFoundException){
+            } catch (FileNotFoundException $fileNotFoundException) {
                 echo $fileNotFoundException->getMessage();
             }
-
         }
-            return new JsonResponse(
+
+        return new JsonResponse(
                 ['ERROR']
             );
     }
-
-
 }
