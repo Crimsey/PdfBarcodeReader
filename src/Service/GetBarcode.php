@@ -8,9 +8,9 @@ namespace App\Service;
 
     class GetBarcode
     {
-        public function getBarcode(File $imagefile): string
+        public function getBarcode(File $imagefile, string $path='/tmp'): string
         {
-            $process = new Process(['zbarimg', $imagefile->getFilename()], '/tmp');
+            $process = new Process(['zbarimg', $imagefile->getFilename()], $path);
 
             $process->run();
 

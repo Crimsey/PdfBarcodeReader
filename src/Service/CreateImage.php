@@ -15,32 +15,20 @@ use Symfony\Component\DependencyInjection\Reference;
 class CreateImage
 {
 
-    public function getImage(File $fileinpdf): File
+    public function getImage(File $fileinpdf,string $path='/tmp'): File
     {
-
-
-
         if ($fileinpdf->getSize() > 0) {
             //$filesystem = new Filesystem();
 
             //$filesystem->chmod($fileinpdf, 777);
-            $process = new Process(['pdftoppm', '-png', $fileinpdf->getFilename(), $fileinpdf->getBasename('.pdf')], '/tmp');
+            $process = new Process(['pdftoppm', '-png', $fileinpdf->getFilename(), $fileinpdf->getBasename('.pdf')], $path);
 
             $process->run();
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
 
-            #Dependency Injection:
-            $containerBuilder = new ContainerBuilder();
-            $containerBuilder->register('create_image_container','CreateImage')
-                ->addMethodCall('getImage');
-
-            $containerBuilder->setParameter('fileinpdf', $fileinpdf);
-            var_dump("CreateImage");
-            var_dump($fileinpdf);
-
-            return new File(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf').'-1.png');
+            return new File($path.'/'.$fileinpdf->getBasename('.pdf').'-1.png');
         } else {
             throw new FileNotFoundException($fileinpdf);
         }

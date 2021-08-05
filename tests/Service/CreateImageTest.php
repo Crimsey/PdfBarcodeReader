@@ -4,33 +4,41 @@
 
 namespace App\Tests\Service;
 
+use Symfony\Component\Filesystem\Filesystem;
 use App\Service\CreateImage;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
-
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 class CreateImageTest extends KernelTestCase
 {
     public function testSomething(): void
     {
-        // (1) boot the Symfony kernel
         self::bootKernel();
-
-        // (2) use static::getContainer() to access the service container
         $container = static::getContainer();
 
-        // (3) run some service & test the result
-        $createImage = $container->get('create_image_container');
-        var_dump($createImage);
+        /** @var  CreateImage $createImage */
+        $createImage = $container->get(CreateImage::class);
 
-        $fileinpdf = $container->getParameter('fileinpdf');
-        var_dump($fileinpdf);
+        //checks directory
+        $this->assertDirectoryExists('tests/Files/',"Directory 'test/Files/ exists");
+        $this->assertDirectoryIsWritable('tests/Files/',"Directory 'test/Files/ is writeable");
 
-        //$image = $createImage->getImage($fileinpdf);
-        //$this->assertEquals(..., $newsletter->getContent());
+        $testfile = new File('tests/Files/Barcode4JReport.pdf');
+        //checks pdf file
+        $this->assertFileExists($testfile,"File Barcode4JReport.pdf exists");
+        $this->assertNotNull($testfile, "File Barcode4JReport.pdf is not null");
+        $this->assertIsObject($testfile, 'File Barcode4JReport.pdf is object');
+
+        $imageFunction = $createImage->getImage($testfile,'tests/Files');
+
+        //checks created png file
+        $this->assertSame('Barcode4JReport-1.png',$imageFunction->getBasename(),"Barcode4JReport-1.png has the same name");
+        $this->assertSame(65487,$imageFunction->getSize(),"Barcode4JReport-1.png has the same size (65487)");
+        $this->assertFileExists('tests/Files/Barcode4JReport-1.png','Barcode4JReport-1.png exists');
+        $this->assertFileIsReadable('tests/Files/Barcode4JReport-1.png','Barcode4JReport-1.png is readable');
+        $this->assertNotNull('tests/Files/Barcode4JReport-1.png', "File Barcode4JReport-1.png is not null");
     }
 
 

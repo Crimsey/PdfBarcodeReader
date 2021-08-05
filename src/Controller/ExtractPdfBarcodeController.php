@@ -73,12 +73,22 @@ class ExtractPdfBarcodeController extends AbstractController
                 $fileinpdf = new File($pdffile);
                 $jpeg = $createImage->getImage($fileinpdf);
                 $barcode = $getBarcode->getBarcode($jpeg);
-                $new_arr = preg_split("/[\s,]+/", $barcode);
+                $pieces = explode("\n",$barcode);
+                var_dump($pieces);
+                /*$newArray =array() ?? "";
+                foreach ($pieces as $lineNum => $line)
+                {
+                    list($key,$value) = explode(":",$line,2);
+                    var_dump('$key: '.$key);
+                    var_dump('$value: '.$value);
+                    $value = preg_replace('/\s+/', ' ', $value);
+                    $newArray[$key][] = $value;
+                }
 
-                var_dump('arr: ');
-                var_dump($new_arr);
+                //var_dump($newArray);*/
                 return new JsonResponse(
-                    json_encode($new_arr,JSON_HEX_QUOT)
+                    //json_encode($newArray)
+                    json_encode($pieces)
                 );
             }catch (FileNotFoundException $fileNotFoundException){
                 echo $fileNotFoundException->getMessage();
