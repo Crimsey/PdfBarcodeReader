@@ -2,7 +2,7 @@
 
 // tests/Service/GetBarcodeTest.php
 
-namespace App\Tests\Service;
+namespace App\Tests\Service\GetBarcodeTest;
 
 use App\Service\CreateImage;
 use App\Service\GetBarcode;
@@ -21,17 +21,17 @@ class GetBarcodeTest extends KernelTestCase
         $getBarcode = $container->get(GetBarcode::class);
 
         //checks directory
-        $this->assertDirectoryExists('tests/Files/',"Directory 'test/Files/ exists");
-        $this->assertDirectoryIsWritable('tests/Files/',"Directory 'test/Files/ is writeable");
+        $this->assertDirectoryExists('tests/Service/GetBarcodeTest/Files',"Directory 'tests/Service/GetBarcodeTest/Files exists");
+        $this->assertDirectoryIsWritable('tests/Service/GetBarcodeTest/Files',"Directory 'tests/Service/GetBarcodeTest/Files is writeable");
 
-        $testpng= new File('tests/Files/Barcode4JReport-1.png');
+        $testpng= new File('tests/Service/GetBarcodeTest/Files/Barcode4JReport-1.png');
 
         //checks png file
-        $this->assertFileExists('tests/Files/Barcode4JReport-1.png','Barcode4JReport-1.png exists');
-        $this->assertFileIsReadable('tests/Files/Barcode4JReport-1.png','Barcode4JReport-1.png is readable');
-        $this->assertNotNull('tests/Files/Barcode4JReport-1.png', "File Barcode4JReport-1.png is not null");
+        $this->assertFileExists('tests/Service/GetBarcodeTest/Files/Barcode4JReport-1.png','Barcode4JReport-1.png exists');
+        $this->assertFileIsReadable('tests/Service/GetBarcodeTest/Files/Barcode4JReport-1.png','Barcode4JReport-1.png is readable');
+        $this->assertNotNull('tests/Service/GetBarcodeTest/Files/Barcode4JReport-1.png', "File Barcode4JReport-1.png is not null");
 
-        $barcodeFunction = $getBarcode->getBarcode($testpng,'tests/Files');
+        $barcodeFunction = $getBarcode->getBarcode($testpng);
 
         //var_dump($barcodeFunction);
 $str_to_compare = "QR-Code:http://barcode4j.sourceforge.net/

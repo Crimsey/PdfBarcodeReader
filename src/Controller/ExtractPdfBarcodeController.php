@@ -19,7 +19,9 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ExtractPdfBarcodeController extends AbstractController
 {
@@ -74,8 +76,8 @@ class ExtractPdfBarcodeController extends AbstractController
                 $jpeg = $createImage->getImage($fileinpdf);
                 $barcode = $getBarcode->getBarcode($jpeg);
                 $pieces = explode("\n",$barcode);
-                var_dump($pieces);
-                /*$newArray =array() ?? "";
+                /*var_dump($pieces);
+                $newArray =array() ?? "";
                 foreach ($pieces as $lineNum => $line)
                 {
                     list($key,$value) = explode(":",$line,2);
@@ -86,6 +88,8 @@ class ExtractPdfBarcodeController extends AbstractController
                 }
 
                 //var_dump($newArray);*/
+                //$process = new Process(['rm','/tmp/*']);
+                //$process->run();
                 return new JsonResponse(
                     //json_encode($newArray)
                     json_encode($pieces)

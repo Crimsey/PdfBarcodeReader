@@ -8,27 +8,21 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
-
-
 class CreateImage
 {
 
-    public function getImage(File $fileinpdf,string $path='/tmp'): File
+    public function getImage(File $fileinpdf): File
     {
         if ($fileinpdf->getSize() > 0) {
-            //$filesystem = new Filesystem();
-
-            //$filesystem->chmod($fileinpdf, 777);
-            $process = new Process(['pdftoppm', '-png', $fileinpdf->getFilename(), $fileinpdf->getBasename('.pdf')], $path);
+            var_dump($fileinpdf->getRealPath());
+            $process = new Process(['pdftoppm', '-png','-r', '300', $fileinpdf->getRealPath(), sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf')]);
 
             $process->run();
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
 
-            return new File($path.'/'.$fileinpdf->getBasename('.pdf').'-1.png');
+            return new File(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf').'-1.png');
         } else {
             throw new FileNotFoundException($fileinpdf);
         }
