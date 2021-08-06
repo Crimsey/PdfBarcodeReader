@@ -24,7 +24,7 @@ class CreateImageTest extends KernelTestCase
         $this->assertDirectoryExists('tests/Service/CreateImageTest/Files', "Directory 'tests/Service/CreateImageTest/Files exists");
         $this->assertDirectoryIsWritable('tests/Service/CreateImageTest/Files', "Directory 'tests/Service/CreateImageTest/Files is writeable");
 
-        $testfile = new File('tests/Service/CreateImageTest/Files/Barcode4JReport.pdf');
+        $testfile = new File(__DIR__.'/Files/Barcode4JReport.pdf');
         //checks pdf file
         $this->assertFileExists($testfile, 'File Barcode4JReport.pdf exists');
         $this->assertNotNull($testfile, 'File Barcode4JReport.pdf is not null');

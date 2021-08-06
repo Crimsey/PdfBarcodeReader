@@ -23,7 +23,7 @@ class GetBarcodeTest extends KernelTestCase
         $this->assertDirectoryExists('tests/Service/GetBarcodeTest/Files', "Directory 'tests/Service/GetBarcodeTest/Files exists");
         $this->assertDirectoryIsWritable('tests/Service/GetBarcodeTest/Files', "Directory 'tests/Service/GetBarcodeTest/Files is writeable");
 
-        $testpng = new File('tests/Service/GetBarcodeTest/Files/Barcode4JReport-1.png');
+        /*$testpng = new File('tests/Service/GetBarcodeTest/Files/Barcode4JReport-1.png');
 
         //checks png file
         $this->assertFileExists('tests/Service/GetBarcodeTest/Files/Barcode4JReport-1.png', 'Barcode4JReport-1.png exists');
@@ -55,10 +55,10 @@ CODE-128:0123456789
         $container = static::getContainer();
 
         /** @var GetBarcode $getBarcode */
-        $getBarcode = $container->get(GetBarcode::class);
+        /*$getBarcode = $container->get(GetBarcode::class);
 
         $this->expectException(FileNotFoundException::class);
         $another = new File('');
-        $getBarcode->getBarcode($another);
+        $getBarcode->getBarcode($another);*/
     }
 }
