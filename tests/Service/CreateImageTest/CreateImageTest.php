@@ -33,16 +33,15 @@ class CreateImageTest extends KernelTestCase
         $imageFunction = $createImage->getImage($testfile);
 
         //checks created png file
-        var_dump($imageFunction->getRealPath());
         $this->assertSame('Barcode4JReport-1.png', $imageFunction->getBasename(), 'Barcode4JReport-1.png has the same name');
         $this->assertSame(146887, $imageFunction->getSize(), 'Barcode4JReport-1.png has the same size (65487)');
-        //$this->assertFileExists('Barcode4JReport-1.png','Barcode4JReport-1.png exists');
-        //$this->assertFileIsReadable('tmp/Barcode4JReport-1.png','Barcode4JReport-1.png is readable');
-        //$this->assertNotNull('tmp/Barcode4JReport-1.png', "File Barcode4JReport-1.png is not null");
+        $this->assertFileExists(sys_get_temp_dir().'/Barcode4JReport-1.png', 'Barcode4JReport-1.png exists');
+        $this->assertFileIsReadable(sys_get_temp_dir().'/Barcode4JReport-1.png', 'Barcode4JReport-1.png is readable');
+        $this->assertNotNull(sys_get_temp_dir().'/Barcode4JReport-1.png', 'File Barcode4JReport-1.png is not null');
 
         //delete file after test
-        //$filesystem = new Filesystem();
-        //$filesystem->remove('tmp/Barcode4JReport-1.png');
+        $filesystem = new Filesystem();
+        $filesystem->remove(sys_get_temp_dir().'/Barcode4JReport-1.png');
     }
 
     public function testFileNotFoundException(): void
@@ -56,5 +55,16 @@ class CreateImageTest extends KernelTestCase
         $this->expectException(FileNotFoundException::class);
         $another = new File('');
         $createImage->getImage($another);
+    }
+
+    public function testCreateImageCanBeCreatedFromFile(): void
+    {
+        $testfile = new File(__DIR__.'/Files/Barcode4JReport.pdf');
+
+        $this->assertInstanceOf(
+            File::class,
+            (new \App\Service\CreateImage())->getImage($testfile),
+            'Variable is of given type - File'
+        );
     }
 }

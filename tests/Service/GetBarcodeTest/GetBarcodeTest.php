@@ -23,7 +23,7 @@ class GetBarcodeTest extends KernelTestCase
         $this->assertDirectoryExists('tests/Service/GetBarcodeTest/Files', "Directory 'tests/Service/GetBarcodeTest/Files exists");
         $this->assertDirectoryIsWritable('tests/Service/GetBarcodeTest/Files', "Directory 'tests/Service/GetBarcodeTest/Files is writeable");
 
-        /*$testpng = new File('tests/Service/GetBarcodeTest/Files/Barcode4JReport-1.png');
+        $testpng = new File(__DIR__.'/Files/Barcode4JReport-1.png');
 
         //checks png file
         $this->assertFileExists('tests/Service/GetBarcodeTest/Files/Barcode4JReport-1.png', 'Barcode4JReport-1.png exists');
@@ -42,23 +42,23 @@ I2/5:0123456789
 CODE-128:0101234567890128
 CODE-128:0123456789
 ';
-
         //checks created string of barcodes
         $this->assertSame($str_to_compare, $barcodeFunction, 'string from zbarimg with barcodes has the same content');
         $this->assertNotNull($barcodeFunction, 'Service GetBarcode returned not null');
         $this->assertIsString($barcodeFunction, 'Service GetBarcode returned string');
     }
 
-    public function testFileNotFoundException(): void
+    public function testFileNotFoundException2(): void
     {
         self::bootKernel();
         $container = static::getContainer();
 
         /** @var GetBarcode $getBarcode */
-        /*$getBarcode = $container->get(GetBarcode::class);
+        $getBarcode = $container->get(GetBarcode::class);
 
         $this->expectException(FileNotFoundException::class);
         $another = new File('');
-        $getBarcode->getBarcode($another);*/
+        $getBarcode->getBarcode($another);
     }
+
 }
