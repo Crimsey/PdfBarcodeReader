@@ -32,20 +32,31 @@ class GetBarcodeTest extends KernelTestCase
 
         $barcodeFunction = $getBarcode->getBarcode($testpng);
 
-        //var_dump($barcodeFunction);
-        $str_to_compare = 'QR-Code:http://barcode4j.sourceforge.net/
-EAN-8:01234565
-EAN-13:0123456789012
-EAN-13:0012300000413
-EAN-13:0012345678905
-I2/5:0123456789
-CODE-128:0101234567890128
-CODE-128:0123456789
-';
-        //checks created string of barcodes
-        $this->assertSame($str_to_compare, $barcodeFunction, 'string from zbarimg with barcodes has the same content');
+        $array_output = [
+    'QR-Code' => [
+        0 => 'http://barcode4j.sourceforge.net/',
+    ],
+    'EAN-8' => [
+        0 => '01234565',
+    ],
+    'EAN-13' => [
+        0 => '0123456789012',
+        1 => '0012300000413',
+        2 => '0012345678905',
+    ],
+    'I2/5' => [
+        0 => '0123456789',
+    ],
+    'CODE-128' => [
+        0 => '0101234567890128',
+        1 => '0123456789',
+    ],
+];
+
+        //checks created array of barcodes
+        $this->assertSame($array_output, $barcodeFunction, 'Array output as expected');
         $this->assertNotNull($barcodeFunction, 'Service GetBarcode returned not null');
-        $this->assertIsString($barcodeFunction, 'Service GetBarcode returned string');
+        $this->assertIsArray($barcodeFunction, 'Service GetBarcode returned array');
     }
 
     public function testFileNotFoundException2(): void

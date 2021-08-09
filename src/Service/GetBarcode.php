@@ -8,7 +8,7 @@ namespace App\Service;
 
     class GetBarcode
     {
-        public function getBarcode(File $imagefile): string
+        public function getBarcode(File $imagefile): array
         {
             $process = new Process(['zbarimg', $imagefile->getRealPath()]);
 
@@ -17,8 +17,16 @@ namespace App\Service;
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
-            //var_dump($process->getOutput());
+            $barcode = $process->getOutput();
+            $barcode = rtrim($barcode, "\n\r\t\v\0");
+            $pieces = explode("\n", $barcode);
+            $newArray = [] ?? '';
+            foreach ($pieces as $lineNum => $line) {
+                $line = trim($line);
+                list($key, $value) = explode(':', $line, 2);
+                $newArray[$key][] = $value;
+            }
 
-            return $process->getOutput();
+            return $newArray;
         }
     }

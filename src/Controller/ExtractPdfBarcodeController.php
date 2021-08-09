@@ -8,7 +8,6 @@ namespace App\Controller;
 //use Swagger\Annotations as SWG;
 use App\Service\CreateImage;
 use App\Service\GetBarcode;
-use Hoa\Iterator\FileSystem;
 use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -70,21 +69,12 @@ class ExtractPdfBarcodeController extends AbstractController
                 $fileinpdf = new File($pdffile);
                 $jpeg = $createImage->getImage($fileinpdf);
                 $barcode = $getBarcode->getBarcode($jpeg);
-                $barcode = rtrim($barcode,"\n\r\t\v\0");
-                $pieces = explode("\n", $barcode);
-                $newArray =array() ?? "";
-                foreach ($pieces as $lineNum => $line)
-                {
-                    $line = trim($line);
-                    list($key,$value) = explode(":",$line,2);
-                    $newArray[$key][] = $value;
-                }
 
-                //$fileinpdf = new FileSystem();
+                $deletetmpfiles = Process::fromShellCommandline('rm -rf /tmp/*');
+                $deletetmpfiles->run();
 
                 return new JsonResponse(
-
-                $newArray
+                $barcode
                 );
             } catch (FileNotFoundException $fileNotFoundException) {
                 echo $fileNotFoundException->getMessage();
