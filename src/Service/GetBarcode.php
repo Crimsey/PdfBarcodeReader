@@ -16,11 +16,10 @@ namespace App\Service;
             $barcode = $process->getOutput();
             $barcode_error = $process->getErrorOutput();
 
-            if(strpos($barcode_error,"scanned 0 barcode symbols") != false) {
-
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
-            }
+            if (false != strpos($barcode_error, 'scanned 0 barcode symbols')) {
+                if (!$process->isSuccessful()) {
+                    throw new ProcessFailedException($process);
+                }
                 $process->disableOutput()->clearOutput();
 
                 $barcode = rtrim($barcode, "\n\r\t\v\0");

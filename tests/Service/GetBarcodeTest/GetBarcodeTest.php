@@ -32,7 +32,6 @@ class GetBarcodeTest extends KernelTestCase
 
         $barcodeFunction = $getBarcode->getBarcode($testpng);
 
-
         //checks created array of barcodes
         $this->assertNotNull($barcodeFunction, 'Service GetBarcode returned not null');
         $this->assertIsArray($barcodeFunction, 'Service GetBarcode returned array');
