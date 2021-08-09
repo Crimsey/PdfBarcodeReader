@@ -16,6 +16,7 @@ class CreateImage
                 $fileinpdf->getPath().'/'.$fileinpdf->getFilename(), sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf'), ]);
 
             $process->run();
+
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }

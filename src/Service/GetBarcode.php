@@ -15,16 +15,15 @@ namespace App\Service;
             $process->run();
             $barcode = $process->getOutput();
             $barcode_error = $process->getErrorOutput();
-
-            if (false != strpos($barcode_error, 'scanned 0 barcode symbols')) {
-                if (!$process->isSuccessful()) {
+            if (!$process->isSuccessful()) {
+                if (false != strpos($barcode_error, 'scanned 0 barcode symbols')) {
                     throw new ProcessFailedException($process);
                 }
+            } else {
                 $process->disableOutput()->clearOutput();
 
                 $barcode = rtrim($barcode, "\n\r\t\v\0");
                 $pieces = explode("\n", $barcode);
-                $newArray = [] ?? '';
                 foreach ($pieces as $lineNum => $line) {
                     $line = trim($line);
                     list($key, $value) = explode(':', $line, 2);
