@@ -60,5 +60,4 @@ CODE-128:0123456789
         $another = new File('');
         $getBarcode->getBarcode($another);
     }
-
 }
