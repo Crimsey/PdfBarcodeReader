@@ -17,7 +17,7 @@ namespace App\Service;
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
-            var_dump($process->getOutput());
+            //var_dump($process->getOutput());
 
             return $process->getOutput();
         }
