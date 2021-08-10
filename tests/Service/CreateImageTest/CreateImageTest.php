@@ -30,7 +30,7 @@ class CreateImageTest extends KernelTestCase
         $this->assertNotNull($testfile, 'File Barcode4JReport.pdf is not null');
         $this->assertIsObject($testfile, 'File Barcode4JReport.pdf is object');
 
-        $imageFunction = $createImage->getImage($testfile);
+        $imageFunction = $createImage->getImage($testfile, 1);
 
         //checks created png file
         $this->assertSame('Barcode4JReport-1.png', $imageFunction->getBasename(), 'Barcode4JReport-1.png has the same name');
@@ -67,7 +67,7 @@ class CreateImageTest extends KernelTestCase
 
         $this->assertInstanceOf(
             File::class,
-            (new \App\Service\CreateImage())->getImage($testfile),
+            (new \App\Service\CreateImage())->getImage($testfile, 1),
             'Variable is of given type - File'
         );
     }

@@ -13,6 +13,7 @@ use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use setasign\Fpdi\PdfParser\PdfParserException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
@@ -22,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ExtractPdfBarcodeController extends AbstractController
 {
-    public function __construct(private CreateImage $createImage, private GetBarcode $getBarcode, private LoggerInterface $logger)
+    public function __construct(private CreateImage $createImage, private GetBarcode $getBarcode, private LoggerInterface $logger, private SplitToPages $split)
     {
     }
 
@@ -66,20 +67,22 @@ class ExtractPdfBarcodeController extends AbstractController
      *     description="This is not a PDF file",
      * )
      * @ParamConverter(name="pdffile", converter="string_to_file_converter")
+     *
+     * @throws PdfParserException
      */
-    public function extract(File $pdffile//,SplitToPages $pages
-    ): JsonResponse {
+    public function extract(File $pdffile): JsonResponse
+    {
         if ($pdffile->getSize() > 0) {
             try {
                 $fileinpdf = new File($pdffile);
-                //$spliting = $pages->split($fileinpdf);
-                $jpeg = $this->createImage->getImage($fileinpdf);
+                $pages = $this->split->split($fileinpdf);
+                $jpeg = $this->createImage->getImage($fileinpdf, $pages);
                 $barcode = $this->getBarcode->getBarcode($jpeg);
 
-                if (false !== glob('/tmp/*.png') && false !== glob('/tmp/*.pdf')) {
+                /*if (false !== glob('/tmp/*.png') && false !== glob('/tmp/*.pdf')) {
                     array_map('unlink', glob('/tmp/*.png'));
                     array_map('unlink', glob('/tmp/*.pdf'));
-                }
+                }*/
 
                 return new JsonResponse(
                 $barcode
