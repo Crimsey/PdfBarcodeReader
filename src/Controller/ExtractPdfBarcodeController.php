@@ -90,7 +90,7 @@ class ExtractPdfBarcodeController extends AbstractController
         }
 
         return new JsonResponse(
-                ['ERROR']
+                []
             );
     }
 }

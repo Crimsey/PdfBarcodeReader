@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -16,9 +17,14 @@ class CreateImage
                 $fileinpdf->getPath().'/'.$fileinpdf->getFilename(), sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf'), ]);
 
             $process->run();
+            $image_error = $process->getErrorOutput();
 
             if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
+                if (false != strpos($image_error, 'May not be a PDF file')) {
+                    echo 'May not be a PDF file'.PHP_EOL;
+                }else{
+                    throw new ProcessFailedException($process);
+                }
             }
 
             return new File(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf').'-1.png');
