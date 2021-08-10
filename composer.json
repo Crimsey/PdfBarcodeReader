@@ -31,7 +31,8 @@
         "symfony/runtime": "*",
         "symfony/serializer": "5.3.*",
         "symfony/var-dumper": "<5.3.4",
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
+        "symfony/twig-bundle": "5.3.*"
     },
     "config": {
         "optimize-autoloader": true,
@@ -58,7 +59,7 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install public/": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"

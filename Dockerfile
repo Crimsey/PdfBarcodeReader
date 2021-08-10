@@ -103,8 +103,8 @@ ARG SYMFONY_VERSION=""
 ENV SYMFONY_VERSION ${SYMFONY_VERSION}
 
 # Download the Symfony skeleton and leverage Docker cache layers
-RUN composer create-project "${SKELETON} ${SYMFONY_VERSION}" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-interaction; \
-	composer clear-cache
+#RUN composer create-project "${SKELETON} ${SYMFONY_VERSION}" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-interaction; \
+#	composer clear-cache
 
 ###> recipes ###
 ###< recipes ###
@@ -113,14 +113,14 @@ COPY . .
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
-	composer install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
-	composer dump-autoload --classmap-authoritative --no-dev; \
-	composer symfony:dump-env prod; \
-	composer run-script --no-dev post-install-cmd; \
+#	composer install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
+#	composer dump-autoload --classmap-authoritative --no-dev; \
+#	composer symfony:dump-env prod; \
+#	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync
-VOLUME /srv/app/var
+#VOLUME /srv/app/var
 
-ENTRYPOINT ["docker-entrypoint"]
+#ENTRYPOINT ["docker-entrypoint"]
 CMD ["php-fpm"]
 
 FROM caddy:${CADDY_VERSION}-builder-alpine AS symfony_caddy_builder
