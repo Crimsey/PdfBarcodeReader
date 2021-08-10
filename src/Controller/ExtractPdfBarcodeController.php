@@ -8,35 +8,25 @@ namespace App\Controller;
 //use Swagger\Annotations as SWG;
 use App\Service\CreateImage;
 use App\Service\GetBarcode;
-use http\Exception\InvalidArgumentException;
+use App\Service\SplitToPages;
 use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use setasign\Fpdi\PdfParser\PdfParserException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ExtractPdfBarcodeController extends AbstractController
 {
-    private CreateImage $createImage;
-    private GetBarcode $getBarcode;
-
-    public function __construct(CreateImage $createImage, GetBarcode $getBarcode)
+    public function __construct(private CreateImage $createImage, private GetBarcode $getBarcode, private LoggerInterface $logger, private SplitToPages $split)
     {
-        $this->createImage = $createImage;
-        $this->getBarcode = $getBarcode;
     }
-
-    /*private ContainerInterface $container;
-
-    public function __construct(ContainerInterface $container) // <- Add this
-    {
-        $this->container = $container;
-    }*/
 
     /**
      * Parse a PDF file and extract the table of barcodes.
@@ -78,36 +68,40 @@ class ExtractPdfBarcodeController extends AbstractController
      *     description="This is not a PDF file",
      * )
      * @ParamConverter(name="pdffile", converter="string_to_file_converter")
+     *
+     * @throws PdfParserException
      */
-    //private  CreateImage $createImage;
-
-    public function extract(File $pdffile, CreateImage $createImage, GetBarcode $getBarcode): JsonResponse
+    public function extract(File $pdffile): JsonResponse
     {
+        //$filesystem = new Filesystem();
+
         if ($pdffile->getSize() > 0) {
-            $fileinpdf = new File($pdffile);
-            //var_dump('$file: '.$file);
+            try {
+                $fileinpdf = new File($pdffile);
+                $pages = $this->split->split($fileinpdf);
+                $response = [];
+                for ($i = 1; $i <= $pages; ++$i) {
+                    $jpeg = $this->createImage->getImage($fileinpdf, $i);
+                    $barcode = $this->getBarcode->getBarcode($jpeg);
+                    if (false !== $jpeg->getRealPath()) {
+                        unlink($jpeg->getRealPath());
+                    }
+                    $response[$i - 1] = $barcode;
+                }
+                if (false !== $fileinpdf->getRealPath()) {
+                    unlink($fileinpdf->getRealPath());
+                }
 
-            $jpeg = $createImage->getImage($fileinpdf);
-            //var_dump('$jestesmy tu: '.$jpeg);
-
-            $barcode = $getBarcode->getBarocde($jpeg);
-            var_dump('barcode: '.$barcode);
+                return new JsonResponse(
+                    $response
+                );
+            } catch (FileNotFoundException $fileNotFoundException) {
+                $this->logger->alert($fileNotFoundException->getMessage());
+            }
         }
 
-        //$createImage->g
-
-        /*if($myfile === null) {
-            throw new BadRequestHttpException('File not provided');
-        }
-        if($myfile === base64_decode($myfile, true)){
-            echo '$myfile is base64';
-        } else{
-            echo '$myfile is NOT base64';
-            throw new InvalidArgumentException('Invalid argument - not base64');
-        }
-*/
         return new JsonResponse(
-            [0, 1, 1]
-        );
+                []
+            );
     }
 }

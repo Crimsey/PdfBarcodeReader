@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use Symfony\Component\Filesystem\Filesystem;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -10,26 +10,28 @@ use Symfony\Component\Process\Process;
 
 class CreateImage
 {
-    public function getImage(File $fileinpdf): File
+    public function __construct(private LoggerInterface $logger)
+    {
+    }
+
+    public function getImage(File $fileinpdf, int $page): File
     {
         if ($fileinpdf->getSize() > 0) {
-            $filesystem = new Filesystem();
-
-            $filesystem->chmod($fileinpdf, 777);
-            //$process = new Process(['pdftoppm','f -1', '-png', $fileinpdf->getFilename(),$fileinpdf->getBasename('.pdf')],'/tmp');
-            $process = new Process(['pdftoppm', '-png', $fileinpdf->getFilename(), $fileinpdf->getBasename('.pdf')], '/tmp');
+            $process = new Process(['pdftoppm', '-png', '-r', '300',
+                $fileinpdf->getPath().'/'.$fileinpdf->getFilename(), sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf'), ]);
 
             $process->run();
-            //var_dump('cokolwiek: ',$process->getOutput());
+            $image_error = $process->getErrorOutput();
+
             if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
+                if (str_contains($image_error, 'May not be a PDF file')) {
+                    $this->logger->info('May not be a PDF file');
+                } else {
+                    throw new ProcessFailedException($process);
+                }
             }
-            //$process = new Process('pdftoppm','-f 1 -r 300 -jpeg quality=100',$file);
-            //return new Process(['pdftoppm -f 1 -r 300 -jpeg quality=100 '.$fileinpdf]);
-            //file_put_contents(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf'),$process->getOutput());
-            //return $process->getOutput();
-            //return true;
-            return new File(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf').'-1.png');
+
+            return new File(sprintf(sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf').'-%d.png', $page));
         } else {
             throw new FileNotFoundException($fileinpdf);
         }
