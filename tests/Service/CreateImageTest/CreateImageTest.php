@@ -61,7 +61,7 @@ class CreateImageTest extends KernelTestCase
 
         $createImage->getImage($another, 1);
         $filesystem = new Filesystem();
-        if($another->getRealPath() !== false) {
+        if (false !== $another->getRealPath()) {
             $filesystem->remove($another->getRealPath());
         }
     }

@@ -18,7 +18,7 @@ class CreateImage
     {
         if ($fileinpdf->getSize() > 0) {
             $process = new Process(['pdftoppm', '-png', '-r', '300',
-                $fileinpdf->getPath().'/'.$fileinpdf->getFilename(), sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf') ]);
+                $fileinpdf->getPath().'/'.$fileinpdf->getFilename(), sys_get_temp_dir().'/'.$fileinpdf->getBasename('.pdf'), ]);
 
             $process->run();
             $image_error = $process->getErrorOutput();

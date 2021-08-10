@@ -36,7 +36,6 @@ class GetBarcodeTest extends KernelTestCase
         //checks created array of barcodes
         $this->assertNotNull($barcodeFunction, 'Service GetBarcode returned not null');
         $this->assertIsArray($barcodeFunction, 'Service GetBarcode returned array');
-
     }
 
     public function testFileNotFoundException2(): void
@@ -52,7 +51,7 @@ class GetBarcodeTest extends KernelTestCase
         $getBarcode->getBarcode($another);
 
         $filesystem = new Filesystem();
-        if($another->getRealPath() !== false) {
+        if (false !== $another->getRealPath()) {
             $filesystem->remove($another->getRealPath());
         }
     }

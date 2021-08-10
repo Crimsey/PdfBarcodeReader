@@ -73,7 +73,7 @@ class ExtractPdfBarcodeController extends AbstractController
      */
     public function extract(File $pdffile): JsonResponse
     {
-        $filesystem = new Filesystem();
+        //$filesystem = new Filesystem();
 
         if ($pdffile->getSize() > 0) {
             try {
@@ -84,14 +84,14 @@ class ExtractPdfBarcodeController extends AbstractController
                     $jpeg = $this->createImage->getImage($fileinpdf, $i);
                     $barcode = $this->getBarcode->getBarcode($jpeg);
                     if (false !== $jpeg->getRealPath()) {
-                        $filesystem->remove($jpeg->getRealPath());
-                   }
-
+                        unlink($jpeg->getRealPath());
+                    }
                     $response[$i - 1] = $barcode;
                 }
                 if (false !== $fileinpdf->getRealPath()) {
-                    $filesystem->remove($fileinpdf->getRealPath());
+                    unlink($fileinpdf->getRealPath());
                 }
+
                 return new JsonResponse(
                     $response
                 );
