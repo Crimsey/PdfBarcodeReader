@@ -10,14 +10,15 @@ namespace App\Service;
     {
         public function getBarcode(File $imagefile): array
         {
-            $process = new Process(['zbarimg', $imagefile->getRealPath()]);
+            //var_dump('$imagefile->getRealPath(): '.$imagefile->getRealPath());
+            $process = Process::fromShellCommandline('zbarimg '.$imagefile->getRealPath());
 
             $process->run();
             $barcode = $process->getOutput();
             $barcode_error = $process->getErrorOutput();
             $newArray = [];
             if (!$process->isSuccessful()) {
-                if (false != strpos($barcode_error, 'scanned 0 barcode symbols')) {
+                if (!str_contains($barcode_error, 'scanned 0 barcode symbols')) {
                     throw new ProcessFailedException($process);
                 } else {
                     return $newArray;

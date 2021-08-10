@@ -15,6 +15,7 @@ use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use setasign\Fpdi\PdfParser\PdfParserException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -72,20 +73,27 @@ class ExtractPdfBarcodeController extends AbstractController
      */
     public function extract(File $pdffile): JsonResponse
     {
+        $filesystem = new Filesystem();
+
         if ($pdffile->getSize() > 0) {
             try {
                 $fileinpdf = new File($pdffile);
                 $pages = $this->split->split($fileinpdf);
-                $jpeg = $this->createImage->getImage($fileinpdf, $pages);
-                $barcode = $this->getBarcode->getBarcode($jpeg);
+                $response = [];
+                for ($i = 1; $i <= $pages; ++$i) {
+                    $jpeg = $this->createImage->getImage($fileinpdf, $i);
+                    $barcode = $this->getBarcode->getBarcode($jpeg);
+                    if (false !== $jpeg->getRealPath()) {
+                        $filesystem->remove($jpeg->getRealPath());
+                   }
 
-                /*if (false !== glob('/tmp/*.png') && false !== glob('/tmp/*.pdf')) {
-                    array_map('unlink', glob('/tmp/*.png'));
-                    array_map('unlink', glob('/tmp/*.pdf'));
-                }*/
-
+                    $response[$i - 1] = $barcode;
+                }
+                if (false !== $fileinpdf->getRealPath()) {
+                    $filesystem->remove($fileinpdf->getRealPath());
+                }
                 return new JsonResponse(
-                $barcode
+                    $response
                 );
             } catch (FileNotFoundException $fileNotFoundException) {
                 $this->logger->alert($fileNotFoundException->getMessage());

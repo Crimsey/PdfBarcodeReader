@@ -6,6 +6,7 @@ namespace App\Tests\Service\GetBarcodeTest;
 
 use App\Service\GetBarcode;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -36,9 +37,6 @@ class GetBarcodeTest extends KernelTestCase
         $this->assertNotNull($barcodeFunction, 'Service GetBarcode returned not null');
         $this->assertIsArray($barcodeFunction, 'Service GetBarcode returned array');
 
-        if (false !== glob('/tmp/*.png')) {
-            array_map('unlink', glob('/tmp/*.png'));
-        }
     }
 
     public function testFileNotFoundException2(): void
@@ -52,5 +50,10 @@ class GetBarcodeTest extends KernelTestCase
         $this->expectException(FileNotFoundException::class);
         $another = new File('');
         $getBarcode->getBarcode($another);
+
+        $filesystem = new Filesystem();
+        if($another->getRealPath() !== false) {
+            $filesystem->remove($another->getRealPath());
+        }
     }
 }

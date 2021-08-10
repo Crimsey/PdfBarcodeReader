@@ -5,6 +5,7 @@
 namespace App\Tests\Service\CreateImageTest;
 
 use App\Service\CreateImage;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class CreateImageTest extends KernelTestCase
 {
+    private LoggerInterface $logger;
+
     public function testSomething(): void
     {
         self::bootKernel();
@@ -40,12 +43,9 @@ class CreateImageTest extends KernelTestCase
         $this->assertNotNull(sys_get_temp_dir().'/Barcode4JReport-1.png', 'File Barcode4JReport-1.png is not null');
 
         //delete file after test
-        if (false !== glob('/tmp/*.pdf') && false !== glob('/tmp/*.png')) {
-            array_map('unlink', glob('/tmp/*.png'));
-            array_map('unlink', glob('/tmp/*.pdf'));
-        }
-        //$filesystem = new Filesystem();
-        //$filesystem->remove(sys_get_temp_dir().'/Barcode4JReport-1.png');
+
+        $filesystem = new Filesystem();
+        $filesystem->remove(sys_get_temp_dir().'/Barcode4JReport-1.png');
     }
 
     public function testFileNotFoundException(): void
@@ -58,10 +58,15 @@ class CreateImageTest extends KernelTestCase
 
         $this->expectException(FileNotFoundException::class);
         $another = new File('');
-        $createImage->getImage($another);
+
+        $createImage->getImage($another, 1);
+        $filesystem = new Filesystem();
+        if($another->getRealPath() !== false) {
+            $filesystem->remove($another->getRealPath());
+        }
     }
 
-    public function testCreateImageCanBeCreatedFromFile(): void
+    /*public function testCreateImageCanBeCreatedFromFile(): void
     {
         $testfile = new File(__DIR__.'/Files/Barcode4JReport.pdf');
 
@@ -70,5 +75,5 @@ class CreateImageTest extends KernelTestCase
             (new \App\Service\CreateImage())->getImage($testfile, 1),
             'Variable is of given type - File'
         );
-    }
+    }*/
 }

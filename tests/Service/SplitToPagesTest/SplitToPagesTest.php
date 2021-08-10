@@ -4,8 +4,8 @@
 
 namespace App\Tests\Service\SplitToPagesTest;
 
-use App\Service\SplitToPages;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 
 class SplitToPagesTest extends KernelTestCase
@@ -19,19 +19,14 @@ class SplitToPagesTest extends KernelTestCase
 
         $splitfile = new File(__DIR__.'/Files/nowy.pdf');
 
-        ///** @var SplitToPages $pages */
-        //$pages = $container->get(SplitToPages::class);
-
-        //checks directory
-
-        //$splitFunction = $pages->split($splitfile);
-
-        //checks created png file
-
+        $filesystem = new Filesystem();
         //delete file after test
-        if (false !== glob('/tmp/*.png') && false !== glob('/tmp/*.pdf')) {
-            array_map('unlink', glob('/tmp/*.png'));
-            array_map('unlink', glob('/tmp/*.pdf'));
+        if (false !== $splitfile->getRealPath()) {
+            $filesystem->remove(__DIR__.'/Files/nowy-1.pdf');
+            $filesystem->remove(__DIR__.'/Files/nowy-2.pdf');
+            $filesystem->remove(__DIR__.'/Files/nowy-3.pdf');
+            $filesystem->remove(__DIR__.'/Files/nowy-4.pdf');
+            $filesystem->remove(__DIR__.'/Files/nowy-5.pdf');
         }
     }
 }
