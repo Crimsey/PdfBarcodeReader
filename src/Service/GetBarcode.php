@@ -15,9 +15,12 @@ namespace App\Service;
             $process->run();
             $barcode = $process->getOutput();
             $barcode_error = $process->getErrorOutput();
+            $newArray = [];
             if (!$process->isSuccessful()) {
                 if (false != strpos($barcode_error, 'scanned 0 barcode symbols')) {
                     throw new ProcessFailedException($process);
+                } else {
+                    return $newArray;
                 }
             } else {
                 $process->disableOutput()->clearOutput();
@@ -31,6 +34,6 @@ namespace App\Service;
                 }
             }
 
-            return $newArray ?? ['No barcodes found'];
+            return $newArray;
         }
     }

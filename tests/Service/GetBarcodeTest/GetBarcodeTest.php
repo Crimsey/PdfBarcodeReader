@@ -35,6 +35,10 @@ class GetBarcodeTest extends KernelTestCase
         //checks created array of barcodes
         $this->assertNotNull($barcodeFunction, 'Service GetBarcode returned not null');
         $this->assertIsArray($barcodeFunction, 'Service GetBarcode returned array');
+
+        if (false !== glob('/tmp/*.png')) {
+            array_map('unlink', glob('/tmp/*.png'));
+        }
     }
 
     public function testFileNotFoundException2(): void

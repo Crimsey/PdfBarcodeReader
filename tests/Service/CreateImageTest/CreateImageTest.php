@@ -40,8 +40,12 @@ class CreateImageTest extends KernelTestCase
         $this->assertNotNull(sys_get_temp_dir().'/Barcode4JReport-1.png', 'File Barcode4JReport-1.png is not null');
 
         //delete file after test
-        $filesystem = new Filesystem();
-        $filesystem->remove(sys_get_temp_dir().'/Barcode4JReport-1.png');
+        if (false !== glob('/tmp/*.pdf') && false !== glob('/tmp/*.png')) {
+            array_map('unlink', glob('/tmp/*.png'));
+            array_map('unlink', glob('/tmp/*.pdf'));
+        }
+        //$filesystem = new Filesystem();
+        //$filesystem->remove(sys_get_temp_dir().'/Barcode4JReport-1.png');
     }
 
     public function testFileNotFoundException(): void

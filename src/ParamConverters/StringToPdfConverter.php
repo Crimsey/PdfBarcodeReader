@@ -8,7 +8,6 @@ namespace App\ParamConverters;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -30,8 +29,7 @@ class StringToPdfConverter implements ParamConverterInterface
             file_put_contents(sys_get_temp_dir().'/'.$filename, '');
             $request->attributes->set($configuration->getName(), new File(sys_get_temp_dir().'/'.$filename));
         }
-        //$filesystem = new Filesystem();
-        //$filesystem->remove(sys_get_temp_dir().'/'.$filename);
+
         return true;
     }
 

@@ -8,19 +8,24 @@ namespace App\Controller;
 //use Swagger\Annotations as SWG;
 use App\Service\CreateImage;
 use App\Service\GetBarcode;
+use App\Service\SplitToPages;
 use OpenApi\Annotations as OA;
 use OpenApi\Annotations\Post;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ExtractPdfBarcodeController extends AbstractController
 {
+    public function __construct(private CreateImage $createImage, private GetBarcode $getBarcode, private LoggerInterface $logger)
+    {
+    }
+
     /**
      * Parse a PDF file and extract the table of barcodes.
      *
@@ -62,22 +67,25 @@ class ExtractPdfBarcodeController extends AbstractController
      * )
      * @ParamConverter(name="pdffile", converter="string_to_file_converter")
      */
-    public function extract(File $pdffile, CreateImage $createImage, GetBarcode $getBarcode): JsonResponse
-    {
+    public function extract(File $pdffile//,SplitToPages $pages
+    ): JsonResponse {
         if ($pdffile->getSize() > 0) {
             try {
                 $fileinpdf = new File($pdffile);
-                $jpeg = $createImage->getImage($fileinpdf);
-                $barcode = $getBarcode->getBarcode($jpeg);
+                //$spliting = $pages->split($fileinpdf);
+                $jpeg = $this->createImage->getImage($fileinpdf);
+                $barcode = $this->getBarcode->getBarcode($jpeg);
 
-                $deletetmpfiles = Process::fromShellCommandline('rm -rf /tmp/*');
-                $deletetmpfiles->run();
+                if (false !== glob('/tmp/*.png') && false !== glob('/tmp/*.pdf')) {
+                    array_map('unlink', glob('/tmp/*.png'));
+                    array_map('unlink', glob('/tmp/*.pdf'));
+                }
 
                 return new JsonResponse(
                 $barcode
                 );
             } catch (FileNotFoundException $fileNotFoundException) {
-                echo $fileNotFoundException->getMessage();
+                $this->logger->alert($fileNotFoundException->getMessage());
             }
         }
 
